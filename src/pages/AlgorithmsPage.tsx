@@ -40,8 +40,6 @@ export function AlgorithmsPage() {
     count: filtered.filter((m) => m.category === cat.id).length,
   }));
 
-  let entryNumber = 0;
-
   const toolbar = (
     <div className="flex flex-col gap-2">
       <div className="relative w-full max-w-xs">
@@ -92,14 +90,13 @@ export function AlgorithmsPage() {
             title={t.algorithms.categories[cat.id]}
             right={`${items.length} ${locale === 'zh' ? '个算法' : 'algorithms'}`}
           >
-            {items.map((meta) => {
-              entryNumber += 1;
+            {items.map((meta, idx) => {
               const done = completedAlgorithms[meta.id] !== undefined;
               const fav = favorites.includes(meta.id);
               return (
                 <BookEntry
                   key={meta.id}
-                  number={String(entryNumber).padStart(2, '0')}
+                  number={`${ci + 1}.${idx + 1}`}
                   accentDot={undefined}
                   title={
                     <Link

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useI18n } from '../../hooks/useI18n';
+import { cn } from '../../lib/cn';
 
 export interface BookTocEntry {
   id: string;
@@ -117,18 +118,21 @@ export function BookSection({
   children: ReactNode;
 }) {
   return (
-    <section id={`sec-${id}`} className="mb-8 scroll-mt-20">
-      <div className="mb-3 flex items-baseline gap-3 border-b border-border pb-2">
-        <span className="font-mono text-xs text-accent">{String(index).padStart(2, '0')}</span>
-        <h2 className="text-lg font-semibold tracking-wide">{title}</h2>
-        {right && <span className="ml-auto text-[11px] text-muted/70">{right}</span>}
+    <section id={`sec-${id}`} className="mb-10 scroll-mt-20">
+      {/* 章头：大号编号 + 大标题，层级一目了然 */}
+      <div className="mb-4 flex items-baseline gap-4 border-b-2 border-border pb-3">
+        <span className="shrink-0 font-mono text-2xl font-bold leading-none text-accent">
+          {String(index).padStart(2, '0')}
+        </span>
+        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+        {right && <span className="ml-auto text-xs text-muted/70">{right}</span>}
       </div>
       <div className="flex flex-col">{children}</div>
     </section>
   );
 }
 
-/** 阅读流中的条目行（书籍式纵向列表项） */
+/** 阅读流中的条目行（书籍式纵向列表项，相对章缩进一层） */
 export function BookEntry({
   number,
   title,
@@ -136,30 +140,50 @@ export function BookEntry({
   description,
   action,
   accentDot,
+  indent = true,
 }: {
+  /** 子编号：章.节（如 "1.3"），弱化显示 */
   number?: string;
   title: ReactNode;
   meta?: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
   accentDot?: string;
+  /** 是否相对章头缩进一层 */
+  indent?: boolean;
 }) {
   return (
-    <article className="flex flex-col gap-2 border-b border-border/60 py-5 last:border-b-0">
+    <article
+      className={cn(
+        'flex flex-col gap-1.5 border-b border-border/60 py-4 last:border-b-0',
+        indent && 'ml-6',
+      )}
+    >
       <div className="flex flex-wrap items-baseline gap-3">
-        {number && <span className="shrink-0 font-mono text-sm text-accent">{number}</span>}
+        {number && (
+          <span className="w-9 shrink-0 text-right font-mono text-[11px] text-muted/70">{number}</span>
+        )}
         {accentDot && (
           <span
-            className="h-2 w-2 shrink-0 self-center rounded-full"
+            className="h-1.5 w-1.5 shrink-0 self-center rounded-full"
             style={{ backgroundColor: accentDot }}
             aria-hidden
           />
         )}
-        <h3 className="text-base font-semibold leading-snug">{title}</h3>
+        <h3 className="text-base font-medium leading-snug text-text/90">{title}</h3>
         {meta && <span className="flex flex-wrap items-center gap-1.5">{meta}</span>}
         {action && <span className="ml-auto">{action}</span>}
       </div>
-      {description && <div className="pl-7 text-xs leading-relaxed text-muted">{description}</div>}
+      {description && (
+        <div
+          className={cn(
+            'text-xs leading-relaxed text-muted',
+            number ? 'pl-12' : indent ? 'pl-6' : 'pl-0',
+          )}
+        >
+          {description}
+        </div>
+      )}
     </article>
   );
 }

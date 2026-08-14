@@ -26,8 +26,6 @@ export function ExercisesPage() {
     count: list.length,
   }));
 
-  let entryNumber = 0;
-
   return (
     <BookPage
       kicker={t.nav.exercises}
@@ -54,12 +52,11 @@ export function ExercisesPage() {
             title={languageName(lang)}
             right={`${list.length} ${locale === 'zh' ? '题' : 'exercises'}`}
           >
-            {list.map((lesson) => {
-              entryNumber += 1;
+            {list.map((lesson, idx) => {
               return (
                 <BookEntry
                   key={lesson.id}
-                  number={String(entryNumber).padStart(2, '0')}
+                  number={`${li + 1}.${idx + 1}`}
                   title={
                     <Link
                       to={`/learn/${lesson.language}/${lesson.id}`}

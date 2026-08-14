@@ -137,13 +137,13 @@ export function LessonTreePage() {
         <div className="flex min-w-0 flex-col">
           {groups.map((group, gi) => (
             <section key={group.id} className="mb-8">
-              {/* Part 标题 */}
-              <div className="mb-4 flex items-baseline gap-3 border-b border-border pb-2">
-                <span className="font-mono text-xs text-accent">
+              {/* Part 标题（最大层级） */}
+              <div className="mb-5 flex flex-wrap items-baseline gap-3 border-b-2 border-border pb-3">
+                <span className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                   PART {gi + 1}
                 </span>
-                <h2 className="text-lg font-semibold tracking-wide">{localize(group.title)}</h2>
-                <span className="ml-auto text-[11px] text-muted/70">
+                <h2 className="text-2xl font-bold tracking-tight">{localize(group.title)}</h2>
+                <span className="ml-auto text-xs text-muted/70">
                   {group.chapters.length} {locale === 'zh' ? '章' : 'chapters'}
                 </span>
               </div>
@@ -156,29 +156,33 @@ export function LessonTreePage() {
                     <article
                       key={chapter.id}
                       id={`ch-${chapter.id}`}
-                      className="scroll-mt-20 border-b border-border/60 py-5 last:border-b-0"
+                      className="scroll-mt-20 border-b border-border/60 py-6 last:border-b-0"
                     >
-                      <div className="flex items-baseline gap-3">
-                        <span className="shrink-0 font-mono text-sm text-accent">
+                      {/* 章：大编号 + 大标题（层级高于小节） */}
+                      <div className="flex items-baseline gap-4">
+                        <span className="shrink-0 font-mono text-2xl font-bold leading-none text-accent">
                           {String(chapterNumber).padStart(2, '0')}
                         </span>
-                        <h3 className="text-base font-semibold leading-snug">
+                        <h3 className="text-xl font-semibold leading-snug tracking-tight">
                           {localize(chapter.title)}
                         </h3>
                       </div>
 
-                      {/* 已上线的知识点（可学习链接） */}
+                      {/* 已上线的知识点（可学习链接，小节层级） */}
                       {chapterLessons.length > 0 && (
-                        <div className="mt-3 flex flex-col gap-1 pl-7">
-                          {chapterLessons.map((lesson) => (
+                        <div className="mt-3 flex flex-col gap-1 pl-10">
+                          {chapterLessons.map((lesson, li) => (
                             <Link
                               key={lesson.id}
                               to={`/learn/${language}/${lesson.id}`}
-                              className="group flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-surface2"
+                              className="group flex items-baseline gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-surface2"
                             >
+                              <span className="w-8 shrink-0 text-right font-mono text-[11px] text-muted/70">
+                                {chapterNumber}.{li + 1}
+                              </span>
                               <span
                                 className={cn(
-                                  'h-1.5 w-1.5 shrink-0 rounded-full',
+                                  'h-1.5 w-1.5 shrink-0 self-center rounded-full',
                                   DIFFICULTY_DOT[lesson.difficulty],
                                 )}
                                 aria-hidden
@@ -196,7 +200,7 @@ export function LessonTreePage() {
                       )}
 
                       {/* 章节主题一览 */}
-                      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 pl-7">
+                      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 pl-12">
                         {chapter.topics.map((topic) => (
                           <span key={topic} className="text-[11px] text-muted/80">
                             {topic}

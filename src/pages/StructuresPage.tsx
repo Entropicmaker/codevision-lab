@@ -115,6 +115,7 @@ export function StructuresPage() {
             }
           >
             <BookEntry
+              indent={false}
               title={
                 <span className="inline-flex items-center gap-2">
                   <span aria-hidden>{structure.icon}</span>
