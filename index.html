@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CodeVision Lab 编程视界：面向 C++、C#、Python 学习者的交互式编程与算法可视化学习平台"
+    />
+    <title>CodeVision Lab · 编程视界</title>
+    <script>
+      // 首屏前应用主题，避免闪烁（与 settingsStore 持久化键保持一致）
+      try {
+        var raw = localStorage.getItem('cv-settings');
+        var s = raw ? JSON.parse(raw) : null;
+        var theme = s && s.state && s.state.theme ? s.state.theme : 'dark';
+        var root = document.documentElement;
+        root.classList.toggle('dark', theme === 'dark');
+        root.classList.toggle('light', theme === 'light');
+        root.setAttribute('lang', (s && s.state && s.state.uiLang) || 'zh-CN');
+      } catch (e) {
+        /* localStorage 不可用时使用默认深色主题 */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

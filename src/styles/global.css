@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+/* 类模式深色：html.dark 时为深色主题（默认），否则浅色 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- 主题令牌 ---- */
+:root {
+  color-scheme: light;
+  /* 浅色 */
+  --cv-bg: #f4f6fa;
+  --cv-surface: #ffffff;
+  --cv-surface-2: #edf1f7;
+  --cv-border: #dbe1ea;
+  --cv-border-strong: #c2ccdb;
+  --cv-text: #17202f;
+  --cv-muted: #5b6a80;
+  --cv-accent: #2563eb;
+  --cv-accent-soft: #dbeafe;
+  --cv-danger: #dc2626;
+  --cv-code-bg: #f6f8fc;
+  --cv-state-idle: #94a3b8;
+  --cv-state-active: #2563eb;
+  --cv-state-comparing: #d97706;
+  --cv-state-done: #059669;
+  --cv-state-invalid: #dc2626;
+  --cv-state-call: #7c3aed;
+  --cv-glow: rgba(37, 99, 235, 0.14);
+}
+
+.dark {
+  color-scheme: dark;
+  /* 深色（默认） */
+  --cv-bg: #0a0e16;
+  --cv-surface: #10161f;
+  --cv-surface-2: #171e2c;
+  --cv-border: #1e2836;
+  --cv-border-strong: #2c3950;
+  --cv-text: #e2e8f0;
+  --cv-muted: #8b98ad;
+  --cv-accent: #4d9fff;
+  --cv-accent-soft: rgba(77, 159, 255, 0.16);
+  --cv-danger: #f87171;
+  --cv-code-bg: #0c1119;
+  --cv-state-idle: #64748b;
+  --cv-state-active: #60a5fa;
+  --cv-state-comparing: #fbbf24;
+  --cv-state-done: #34d399;
+  --cv-state-invalid: #f87171;
+  --cv-state-call: #a78bfa;
+  --cv-glow: rgba(77, 159, 255, 0.16);
+}
+
+/* Tailwind v4 语义色 → 工具类（bg-bg / text-text / border-border / fill-s-active …） */
+@theme {
+  --color-bg: var(--cv-bg);
+  --color-surface: var(--cv-surface);
+  --color-surface2: var(--cv-surface-2);
+  --color-border: var(--cv-border);
+  --color-borderstrong: var(--cv-border-strong);
+  --color-text: var(--cv-text);
+  --color-muted: var(--cv-muted);
+  --color-accent: var(--cv-accent);
+  --color-accentsoft: var(--cv-accent-soft);
+  --color-danger: var(--cv-danger);
+  --color-codebg: var(--cv-code-bg);
+  --color-s-idle: var(--cv-state-idle);
+  --color-s-active: var(--cv-state-active);
+  --color-s-comparing: var(--cv-state-comparing);
+  --color-s-done: var(--cv-state-done);
+  --color-s-invalid: var(--cv-state-invalid);
+  --color-s-call: var(--cv-state-call);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC",
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--cv-border);
+  }
+  html {
+    font-family: var(--font-sans);
+  }
+  body {
+    margin: 0;
+    background-color: var(--cv-bg);
+    color: var(--cv-text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  code,
+  pre,
+  kbd {
+    font-family: var(--font-mono);
+  }
+  ::selection {
+    background-color: var(--cv-accent-soft);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cv-border-strong) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--cv-border-strong);
+    border-radius: 4px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: color-mix(in srgb, var(--cv-surface) 86%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .viz-transition {
+    transition:
+      transform 240ms cubic-bezier(0.4, 0, 0.2, 1),
+      fill 180ms ease,
+      stroke 180ms ease,
+      opacity 180ms ease;
+  }
+  /* Monaco 当前执行行高亮 */
+  .cv-current-line {
+    background-color: var(--cv-accent-soft) !important;
+    border-left: 2px solid var(--cv-accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viz-transition {
+    transition: none;
+  }
+}
