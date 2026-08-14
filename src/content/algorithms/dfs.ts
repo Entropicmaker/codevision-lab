@@ -86,7 +86,7 @@ export const dfsMeta: AlgorithmMeta = {
     time: { best: 'O(V+E)', average: 'O(V+E)', worst: 'O(V+E)' },
     space: 'O(V)',
   },
-  prerequisites: [],
+  prerequisites: ['tree-traversal'],
   tags: ['图', '深度优先', '回溯', '栈'],
   inputSpec: {
     name: 'edges',

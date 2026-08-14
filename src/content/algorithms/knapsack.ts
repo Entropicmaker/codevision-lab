@@ -93,7 +93,7 @@ export const knapsackMeta: AlgorithmMeta = {
     time: { best: 'O(nW)', average: 'O(nW)', worst: 'O(nW)' },
     space: 'O(nW)',
   },
-  prerequisites: [],
+  prerequisites: ['fibonacci'],
   tags: ['动态规划', '背包', '组合优化', '状态转移'],
   inputSpec: {
     name: 'values',

@@ -1,11 +1,14 @@
 import { memo } from 'react';
 import type { AlgorithmStep, DisplayItem } from '../engine/types/step';
 import { stateColorVar } from './stateColor';
+import { PointerLabelGroup } from './PointerLabels';
 import { useI18n } from '../hooks/useI18n';
 
 /**
- * 数组柱状图渲染器：柱高 = 值，颜色 = 元素状态，支持索引与指针标注。
- * 纯 SVG，几何属性通过 CSS 过渡动画（viz-transition）。
+ * 数组柱状图渲染器（排序类）：
+ * - 柱高 = 值，颜色 = 元素状态，柱顶值标签（柱内或柱上方自适应）
+ * - 底部基线 + 索引刻度
+ * - 指针以胶囊标签标注（i / j 等），分层错开
  */
 interface ArrayBarsProps {
   step: AlgorithmStep | null;
@@ -28,14 +31,14 @@ export const ArrayBars = memo(function ArrayBars({ step, containerId }: ArrayBar
 
   const n = items.length;
   const maxValue = Math.max(1, ...items.map((el) => Number(el.value)));
-  const W = Math.max(320, n * 48 + 56);
-  const H = 250;
-  const padX = 28;
+  const W = Math.max(340, n * 52 + 64);
+  const H = 276;
+  const padX = 30;
   const slot = (W - padX * 2) / n;
-  const barW = Math.min(34, slot * 0.62);
-  const topArea = 44; // 指针区
-  const bottomArea = 26; // 索引区
-  const barMaxH = H - topArea - bottomArea - 8;
+  const barW = Math.min(36, slot * 0.6);
+  const topArea = 96; // 指针胶囊区
+  const baselineY = H - 36;
+  const barMaxH = baselineY - topArea - 10;
 
   const pointers = step?.pointers ?? [];
   const pointerFor = (index: number) => pointers.filter((p) => p.target === `a:${index}`);
@@ -47,14 +50,24 @@ export const ArrayBars = memo(function ArrayBars({ step, containerId }: ArrayBar
       role="img"
       aria-label={t.panels.containers}
     >
+      {/* 基线 */}
+      <line
+        x1={padX - 12}
+        y1={baselineY}
+        x2={W - padX + 12}
+        y2={baselineY}
+        stroke="var(--cv-border-strong)"
+        strokeWidth={1.5}
+      />
+
       {items.map((el, i) => {
         const value = Number(el.value);
-        const barH = Math.max(4, (value / maxValue) * barMaxH);
+        const barH = Math.max(5, (value / maxValue) * barMaxH);
         const cx = padX + i * slot + slot / 2;
         const x = cx - barW / 2;
-        const y = H - bottomArea - barH;
+        const y = baselineY - barH;
         const fill = stateColorVar(el.state);
-        const myPointers = pointerFor(i);
+        const showInnerValue = barH >= 24;
         return (
           <g key={el.id}>
             {/* 柱体 */}
@@ -66,60 +79,42 @@ export const ArrayBars = memo(function ArrayBars({ step, containerId }: ArrayBar
               height={barH}
               rx={5}
               fill={fill}
-              opacity={el.state === 'idle' ? 0.55 : 1}
+              opacity={el.state === 'idle' ? 0.45 : 1}
+              stroke={fill}
+              strokeWidth={el.state === 'idle' ? 0 : 1}
             />
-            {/* 柱顶值 */}
-            <text
-              className="viz-transition"
-              x={cx}
-              y={y - 6}
-              textAnchor="middle"
-              fontSize={11}
-              fill="var(--cv-text)"
-            >
-              {value}
-            </text>
-            {/* 索引 */}
-            <text
-              x={cx}
-              y={H - 8}
-              textAnchor="middle"
-              fontSize={11}
-              fill="var(--cv-muted)"
-            >
+            {/* 值标签：柱内（白字）或柱上方（正文色） */}
+            {showInnerValue ? (
+              <text
+                className="viz-transition"
+                x={cx}
+                y={y + 15}
+                textAnchor="middle"
+                fontSize={12}
+                fontWeight={700}
+                fill="#ffffff"
+              >
+                {value}
+              </text>
+            ) : (
+              <text
+                className="viz-transition"
+                x={cx}
+                y={y - 6}
+                textAnchor="middle"
+                fontSize={11.5}
+                fontWeight={600}
+                fill="var(--cv-text)"
+              >
+                {value}
+              </text>
+            )}
+            {/* 索引刻度 */}
+            <text x={cx} y={baselineY + 18} textAnchor="middle" fontSize={11} fill="var(--cv-muted)">
               {i}
             </text>
-            {/* 指针箭头 */}
-            {myPointers.map((p, pi) => {
-              const arrowY = topArea - 6 - pi * 18;
-              const lineY = topArea - pi * 18;
-              return (
-                <g key={p.id}>
-                  <line
-                    x1={cx}
-                    y1={lineY}
-                    x2={cx}
-                    y2={y + 4}
-                    stroke="var(--cv-accent)"
-                    strokeWidth={1.5}
-                    strokeDasharray="4 3"
-                  />
-                  <path
-                    d={`M ${cx} ${arrowY} l -5 -9 h 10 Z`}
-                    fill="var(--cv-accent)"
-                  />
-                  <text
-                    x={cx + 9}
-                    y={lineY - 2}
-                    fontSize={12}
-                    fontWeight={700}
-                    fill="var(--cv-accent)"
-                  >
-                    {p.name}
-                  </text>
-                </g>
-              );
-            })}
+            {/* 指针胶囊 */}
+            <PointerLabelGroup pointers={pointerFor(i)} cx={cx} topY={y} />
           </g>
         );
       })}

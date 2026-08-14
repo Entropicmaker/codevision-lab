@@ -108,7 +108,7 @@ export const bfsMeta: AlgorithmMeta = {
     time: { best: 'O(V+E)', average: 'O(V+E)', worst: 'O(V+E)' },
     space: 'O(V)',
   },
-  prerequisites: [],
+  prerequisites: ['tree-traversal', 'queue-demo'],
   tags: ['图', '广度优先', '队列', '最短路径'],
   inputSpec: {
     name: 'edges',

@@ -67,7 +67,7 @@ export const treeTraversalMeta: AlgorithmMeta = {
     time: { best: 'O(n)', average: 'O(n)', worst: 'O(n)' },
     space: 'O(h)',
   },
-  prerequisites: [],
+  prerequisites: ['stack-demo'],
   tags: ['二叉树', '递归', '前序', '中序', '后序'],
   inputSpec: {
     name: 'tree',
