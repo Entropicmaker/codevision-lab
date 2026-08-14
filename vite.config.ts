@@ -2,9 +2,9 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig({
-  // GitHub Pages 项目页子路径：绝对 base 保证子路由刷新后资源路径正确
-  base: '/codevision-lab/',
+export default defineConfig(({ command }) => ({
+  // 生产构建部署在 GitHub Pages 子路径；开发模式保持根路径（E2E 与本地体验不变）
+  base: command === 'build' ? '/codevision-lab/' : '/',
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
@@ -39,4 +39,4 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     restoreMocks: true,
   },
-});
+}));
