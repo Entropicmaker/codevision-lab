@@ -3,6 +3,8 @@
 面向 **C++、C#、Python** 学习者的交互式编程与算法可视化学习平台。
 可单步执行、可回放、可修改数据，动画与代码行严格同步。
 
+🌐 **线上地址**：<https://lingeocs.com/codevision-lab/>（GitHub Pages 部署，仓库 `Entropicmaker/codevision-lab`，push 到 main 自动构建发布）
+
 ![技术栈](https://img.shields.io/badge/React-19-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-strict-blue) ![Vite](https://img.shields.io/badge/Vite-8-purple)
 
 ## ✨ 功能特性
