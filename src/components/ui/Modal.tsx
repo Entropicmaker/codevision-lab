@@ -37,7 +37,7 @@ export function Modal({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className={cn('w-full rounded-xl border border-border bg-surface p-4 shadow-2xl', widthClass)}>
+      <div className={cn('w-full rounded-2xl border border-border bg-surface cv-card p-4 shadow-2xl', widthClass)}>
         <div className="mb-3 flex items-center justify-between gap-3">
           <h2 className="text-sm font-semibold text-text">{title}</h2>
           <button

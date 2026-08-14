@@ -54,7 +54,6 @@ export const cppVarsLesson: LessonMeta = {
   chapterId: 'vars',
   title: { zh: '变量、常量和基本类型', en: 'Variables, Constants & Basic Types' },
   difficulty: 'easy',
-  minutes: 15,
   prerequisites: [],
   concept: [
     '变量是一块有名字的内存区域：程序通过变量名读写其中的值。C++ 是静态类型语言——每个变量在声明时就要确定类型，编译器据此分配内存并检查操作是否合法。',

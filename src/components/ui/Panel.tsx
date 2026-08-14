@@ -24,7 +24,7 @@ export function Panel({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <section className={cn('rounded-xl border border-border bg-surface', className)}>
+    <section className={cn('rounded-2xl border border-border bg-surface cv-card', className)}>
       <header className="flex items-center gap-2 px-3 py-2">
         <button
           type="button"

@@ -54,7 +54,6 @@ export const pythonContainersLesson: LessonMeta = {
   chapterId: 'containers',
   title: { zh: '列表、元组、集合、字典', en: 'Lists, Tuples, Sets & Dicts' },
   difficulty: 'easy',
-  minutes: 25,
   prerequisites: [],
   concept: [
     'Python 的四大内置容器：列表 list（有序、可变，最常用）、元组 tuple（有序、不可变，常作固定组合与字典键）、集合 set（无序、去重、支持交并差）、字典 dict（键值对，查找 O(1)）。',

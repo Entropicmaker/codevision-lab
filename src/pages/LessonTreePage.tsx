@@ -186,7 +186,6 @@ export function LessonTreePage() {
                               <span className="text-sm font-medium text-accent group-hover:underline">
                                 {localize(lesson.title)}
                               </span>
-                              <span className="text-[11px] text-muted">{lesson.minutes} min</span>
                               <IconChevronRight
                                 size={14}
                                 className="ml-auto text-muted opacity-0 transition-opacity group-hover:opacity-100"

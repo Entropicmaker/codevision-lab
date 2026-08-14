@@ -9,7 +9,6 @@ export interface LessonMeta {
   chapterId: string;
   title: LocalizedText;
   difficulty: 'easy' | 'medium' | 'hard';
-  minutes: number;
   prerequisites: string[];
   concept: string[];
   codeExamples: Record<CodeLang, CodeExample>;

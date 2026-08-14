@@ -57,7 +57,6 @@ export const csharpTypesLesson: LessonMeta = {
   chapterId: 'vars-types',
   title: { zh: '值类型与引用类型', en: 'Value Types & Reference Types' },
   difficulty: 'easy',
-  minutes: 20,
   prerequisites: [],
   concept: [
     'C# 把类型分为两大类：值类型（int、double、bool、char、struct、enum）直接存放数据，赋值时整体拷贝；引用类型（class、string、数组、委托）存放的是指向堆上对象的引用，赋值时只拷贝引用。',

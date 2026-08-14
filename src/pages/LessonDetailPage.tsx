@@ -36,7 +36,7 @@ export function LessonDetailPage() {
 
   return (
     <div className="flex flex-col gap-3">
-      <header className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4">
+      <header className="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-4">
         <nav aria-label="breadcrumb" className="flex items-center gap-1 text-xs text-muted">
           <Link to={`/learn/${lesson.language}`} className="hover:text-text">
             {t.nav.lessons} · {lesson.language === 'cpp' ? 'C++' : lesson.language === 'csharp' ? 'C#' : 'Python'}
@@ -47,9 +47,6 @@ export function LessonDetailPage() {
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="text-xl font-bold">{localize(lesson.title)}</h1>
           <DifficultyBadge difficulty={lesson.difficulty} />
-          <Badge tone="neutral">
-            {locale === 'zh' ? `约 ${lesson.minutes} 分钟` : `~${lesson.minutes} min`}
-          </Badge>
           {isDone && (
             <Badge tone="done">
               <IconCheck size={11} />
@@ -60,7 +57,7 @@ export function LessonDetailPage() {
       </header>
 
       {/* 概念说明 */}
-      <section className="rounded-xl border border-border bg-surface p-4">
+      <section className="rounded-2xl border border-border bg-surface p-4">
         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
           {locale === 'zh' ? '概念说明' : 'Concept'}
         </h2>
@@ -74,7 +71,7 @@ export function LessonDetailPage() {
       </section>
 
       {/* 代码示例 */}
-      <section className="flex min-h-72 flex-col rounded-xl border border-border bg-surface">
+      <section className="flex min-h-72 flex-col rounded-2xl border border-border bg-surface">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
           <LanguageSwitcher value={codeLang} onChange={setCodeLang} withDemoNote={false} />
         </div>
@@ -92,7 +89,7 @@ export function LessonDetailPage() {
 
       {/* 三语言对比 */}
       {lesson.comparison.length > 0 && (
-        <section className="overflow-x-auto rounded-xl border border-border bg-surface">
+        <section className="overflow-x-auto rounded-2xl border border-border bg-surface">
           <h2 className="border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
             {locale === 'zh' ? '三语言写法对比' : 'Cross-language comparison'}
           </h2>
@@ -123,7 +120,7 @@ export function LessonDetailPage() {
 
       {/* 常见错误 */}
       {lesson.commonMistakes.length > 0 && (
-        <section className="rounded-xl border border-border bg-surface p-3">
+        <section className="rounded-2xl border border-border bg-surface p-3">
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
             {t.panels.mistakes}
           </h2>

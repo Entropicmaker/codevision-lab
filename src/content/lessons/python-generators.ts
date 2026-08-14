@@ -62,7 +62,6 @@ export const pythonGeneratorsLesson: LessonMeta = {
   chapterId: 'generators',
   title: { zh: '生成器（yield）', en: 'Generators & yield' },
   difficulty: 'medium',
-  minutes: 25,
   prerequisites: ['python-containers'],
   concept: [
     '生成器是"可以暂停和恢复的函数"：函数体内出现 yield 时，调用它不会立即执行，而是返回一个生成器对象；每次 next() 执行到下一个 yield，把值产出并暂停，期间局部变量与执行位置都被保留。',

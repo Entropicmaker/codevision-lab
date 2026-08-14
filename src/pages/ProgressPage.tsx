@@ -45,7 +45,7 @@ export function ProgressPage() {
       ) : (
         <>
           {/* 总体进度 */}
-          <section className="rounded-xl border border-border bg-surface p-4">
+          <section className="rounded-2xl border border-border bg-surface cv-card p-4">
             <div className="mb-2 flex items-center justify-between text-sm">
               <span className="font-medium text-text">{t.progress.overall}</span>
               <span className="font-mono text-muted">
@@ -90,7 +90,7 @@ export function ProgressPage() {
                     <Link
                       key={id}
                       to={`/algorithms/${id}`}
-                      className="flex items-center gap-2.5 rounded-xl border border-border bg-surface px-3 py-2.5 transition hover:border-borderstrong"
+                      className="flex items-center gap-2.5 rounded-2xl border border-border bg-surface cv-card px-3 py-2.5 transition hover:border-borderstrong"
                     >
                       <span className="font-medium text-text">{localize(meta.name)}</span>
                       <DifficultyBadge difficulty={meta.difficulty} />
@@ -117,7 +117,7 @@ export function ProgressPage() {
                   <Link
                     key={meta.id}
                     to={`/algorithms/${meta.id}`}
-                    className="flex items-center gap-2.5 rounded-xl border border-border bg-surface px-3 py-2.5 transition hover:border-borderstrong"
+                    className="flex items-center gap-2.5 rounded-2xl border border-border bg-surface cv-card px-3 py-2.5 transition hover:border-borderstrong"
                   >
                     <span className="font-medium text-text">{localize(meta.name)}</span>
                     <Badge tone="accent">{t.algorithms.categories[meta.category]}</Badge>

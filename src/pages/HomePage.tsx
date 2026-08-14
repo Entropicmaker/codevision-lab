@@ -26,7 +26,7 @@ export function HomePage() {
   return (
     <div className="flex flex-col gap-10">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-2xl border border-border bg-surface px-6 py-12 sm:px-10 lg:py-16">
+      <section className="relative overflow-hidden rounded-2xl border border-border bg-surface cv-card px-6 py-12 sm:px-10 lg:py-16">
         <div
           aria-hidden
           className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full opacity-30 blur-3xl"
@@ -36,7 +36,7 @@ export function HomePage() {
           <div className="flex flex-col items-start gap-4">
             <Badge tone="accent">{home.badge}</Badge>
             <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              <span className="bg-gradient-to-r from-sky-400 via-accent to-violet-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#0d7a8c] via-[#2c8a7a] to-[#3e7c4f] bg-clip-text text-transparent dark:from-cyan-300 dark:via-accent dark:to-emerald-400">
                 {home.heroTitle}
               </span>
             </h1>
@@ -58,7 +58,7 @@ export function HomePage() {
           </div>
 
           {/* 装饰代码卡片 */}
-          <div className="rounded-xl border border-border bg-codebg p-4 shadow-lg">
+          <div className="rounded-2xl border border-border bg-codebg p-4 shadow-lg">
             <div className="mb-2 flex items-center gap-1.5" aria-hidden>
               <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
               <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
@@ -116,7 +116,7 @@ export function HomePage() {
           return (
             <div
               key={f.titleKey}
-              className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"
+              className="flex flex-col gap-2 rounded-2xl border border-border bg-surface cv-card p-4"
             >
               <Icon size={20} className="text-accent" />
               <h3 className="text-sm font-semibold">
@@ -139,7 +139,7 @@ export function HomePage() {
             <Link
               key={lang.id}
               to={`/learn/${lang.id}`}
-              className="group flex flex-col gap-2 rounded-xl border border-border bg-surface p-5 transition hover:border-borderstrong"
+              className="group flex flex-col gap-2 rounded-2xl border border-border bg-surface cv-card p-5 transition hover:border-borderstrong"
             >
               <span className={`text-xl font-bold ${lang.color}`}>{lang.name}</span>
               <span className="text-xs text-muted">{lang.desc}</span>
@@ -175,7 +175,7 @@ export function HomePage() {
       </section>
 
       {/* 路线图 CTA */}
-      <section className="flex flex-col items-start justify-between gap-4 rounded-xl border border-border bg-gradient-to-r from-accentsoft/60 to-transparent p-6 sm:flex-row sm:items-center">
+      <section className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-border bg-gradient-to-r from-accentsoft/60 to-transparent p-6 sm:flex-row sm:items-center">
         <div>
           <h2 className="flex items-center gap-2 text-lg font-semibold">
             <IconInfo size={18} className="text-accent" />

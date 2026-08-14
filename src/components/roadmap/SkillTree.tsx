@@ -261,7 +261,7 @@ export function SkillTree({
             key={item.id}
             to={`/algorithms/${item.id}`}
             className={cn(
-              'absolute flex flex-col justify-center gap-1 rounded-xl border border-border border-l-4 bg-surface px-4 py-2 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg',
+              'absolute flex flex-col justify-center gap-1 rounded-2xl border border-border border-l-4 bg-surface px-4 py-2 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg',
               DIFFICULTY_ACCENT[item.difficulty],
               isMatch && 'ring-2 ring-accent ring-offset-2 ring-offset-bg',
             )}

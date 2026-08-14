@@ -59,7 +59,6 @@ export const cppPointersLesson: LessonMeta = {
   chapterId: 'pointers',
   title: { zh: '指针与内存地址', en: 'Pointers & Memory Addresses' },
   difficulty: 'medium',
-  minutes: 25,
   prerequisites: ['cpp-vars'],
   concept: [
     '内存中的每个存储单元都有地址。指针是"保存地址的变量"：int* p = &value; 让 p 保存 value 的地址，*p 则通过地址间接读写 value（解引用）。',

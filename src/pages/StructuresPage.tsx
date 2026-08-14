@@ -98,7 +98,7 @@ export function StructuresPage() {
           return (
             <section
               key={structure.id}
-              className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"
+              className="flex flex-col gap-2 rounded-2xl border border-border bg-surface cv-card p-4"
             >
               <div className="flex items-center gap-2">
                 <span className="text-xl" aria-hidden>

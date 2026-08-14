@@ -57,7 +57,6 @@ export const csharpDelegatesLesson: LessonMeta = {
   chapterId: 'delegates',
   title: { zh: '委托（delegate）', en: 'Delegates' },
   difficulty: 'medium',
-  minutes: 25,
   prerequisites: ['csharp-types'],
   concept: [
     '委托是"方法的类型"：它把方法打包成可以赋值、传参、返回的对象。delegate int BinaryOp(int a, int b); 声明了一个"接受两个 int、返回 int"的方法签名类型。',

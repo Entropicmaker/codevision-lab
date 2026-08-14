@@ -12,7 +12,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-accent text-white hover:opacity-90 disabled:hover:opacity-100 shadow-[0_0_0_1px_transparent]',
+    'bg-accent text-white hover:opacity-90 disabled:hover:opacity-100 glow-accent',
   secondary:
     'bg-surface2 text-text border border-border hover:border-borderstrong',
   ghost: 'bg-transparent text-muted hover:text-text hover:bg-surface2',
@@ -20,8 +20,8 @@ const variantClasses: Record<Variant, string> = {
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'h-8 px-2.5 text-xs gap-1.5 rounded-md',
-  md: 'h-9 px-3.5 text-sm gap-2 rounded-lg',
+  sm: 'h-8 px-2.5 text-xs gap-1.5 rounded-lg',
+  md: 'h-9 px-3.5 text-sm gap-2 rounded-xl',
 };
 
 export function Button({

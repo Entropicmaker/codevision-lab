@@ -127,7 +127,7 @@ export function LabPage() {
   })();
 
   const demoModeCard = (name: string, desc: string) => (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-5">
+    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">
       <h2 className="text-lg font-semibold">{name}</h2>
       <p className="max-w-xl text-sm leading-relaxed text-muted">{desc}</p>
       <div className="flex items-start gap-2 rounded-lg border border-border bg-surface2/60 px-3 py-2 text-xs text-muted">
@@ -159,7 +159,7 @@ export function LabPage() {
 
       {tab === 'python' ? (
         <div className="grid items-start gap-3 xl:grid-cols-[1fr_320px]">
-          <section className="flex min-h-96 flex-col rounded-xl border border-border bg-surface">
+          <section className="flex min-h-96 flex-col rounded-2xl border border-border bg-surface">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-semibold text-text">{t.lab.python.name}</h2>
@@ -193,7 +193,7 @@ export function LabPage() {
           </section>
 
           <section className="flex flex-col gap-3">
-            <div className="rounded-xl border border-border bg-surface">
+            <div className="rounded-2xl border border-border bg-surface">
               <div className="border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
                 {t.lab.python.stdout}
               </div>
@@ -208,7 +208,7 @@ export function LabPage() {
               </pre>
             </div>
             {result !== null && result !== '' && (
-              <div className="rounded-xl border border-border bg-surface">
+              <div className="rounded-2xl border border-border bg-surface">
                 <div className="border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
                   {t.lab.python.result}
                 </div>
@@ -220,7 +220,7 @@ export function LabPage() {
             {error && (
               <div
                 role="alert"
-                className="rounded-xl border border-danger/40 bg-danger/10"
+                className="rounded-2xl border border-danger/40 bg-danger/10"
               >
                 <div className="border-b border-danger/30 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-danger">
                   {t.lab.python.runtimeError}

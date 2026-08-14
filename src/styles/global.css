@@ -3,54 +3,63 @@
 /* 类模式深色：html.dark 时为深色主题（默认），否则浅色 */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ---- 主题令牌 ---- */
+/* ============================================================
+   主题设计语言：Apple 风（毛玻璃 · 大圆角 · 弥散阴影 · SF 字体）
+   × 博客深海自然色系（#0e181a / ocean / 苔绿 / 沙棕）
+   × 复古未来科技点缀（电子青 · 终端琥珀 · 磷光绿）
+   ============================================================ */
+
 :root {
   color-scheme: light;
-  /* 浅色 */
-  --cv-bg: #f4f6fa;
-  --cv-surface: #ffffff;
-  --cv-surface-2: #edf1f7;
-  --cv-border: #dbe1ea;
-  --cv-border-strong: #c2ccdb;
-  --cv-text: #17202f;
-  --cv-muted: #5b6a80;
-  --cv-accent: #2563eb;
-  --cv-accent-soft: #dbeafe;
-  --cv-danger: #dc2626;
-  --cv-code-bg: #f6f8fc;
-  --cv-state-idle: #94a3b8;
-  --cv-state-active: #2563eb;
-  --cv-state-comparing: #d97706;
-  --cv-state-done: #059669;
-  --cv-state-invalid: #dc2626;
-  --cv-state-call: #7c3aed;
-  --cv-glow: rgba(37, 99, 235, 0.14);
+  /* 浅色：米白纸面 + 深海墨字（呼应博客浅色方案） */
+  --cv-bg: #f1f4f1;
+  --cv-surface: rgb(252 253 250 / 0.86);
+  --cv-surface-2: #e9eeea;
+  --cv-border: #d8dfdc;
+  --cv-border-strong: #b7c5be;
+  --cv-text: #183034;
+  --cv-muted: #667679;
+  --cv-accent: #0d7a8c;
+  --cv-accent-soft: rgb(23 70 83 / 0.1);
+  --cv-danger: #d64b3d;
+  --cv-code-bg: #f6f8f5;
+  --cv-state-idle: #a9b6b1;
+  --cv-state-active: #0d7a8c;
+  --cv-state-comparing: #c67a1e;
+  --cv-state-done: #3e7c4f;
+  --cv-state-invalid: #d64b3d;
+  --cv-state-call: #7a5fd0;
+  --cv-glow: rgb(23 70 83 / 0.14);
+  --cv-shadow: 0 22px 70px rgb(39 72 66 / 0.11);
+  --cv-shadow-soft: 0 10px 34px rgb(39 72 66 / 0.07);
 }
 
 .dark {
   color-scheme: dark;
-  /* 深色（默认） */
-  --cv-bg: #0a0e16;
-  --cv-surface: #10161f;
-  --cv-surface-2: #171e2c;
-  --cv-border: #1e2836;
-  --cv-border-strong: #2c3950;
-  --cv-text: #e2e8f0;
-  --cv-muted: #8b98ad;
-  --cv-accent: #4d9fff;
-  --cv-accent-soft: rgba(77, 159, 255, 0.16);
-  --cv-danger: #f87171;
-  --cv-code-bg: #0c1119;
-  --cv-state-idle: #64748b;
-  --cv-state-active: #60a5fa;
-  --cv-state-comparing: #fbbf24;
-  --cv-state-done: #34d399;
-  --cv-state-invalid: #f87171;
-  --cv-state-call: #a78bfa;
-  --cv-glow: rgba(77, 159, 255, 0.16);
+  /* 深色（默认）：深海黑绿 + 电子青 + 磷光绿 */
+  --cv-bg: #0e181a;
+  --cv-surface: rgb(19 33 36 / 0.78);
+  --cv-surface-2: #182a2d;
+  --cv-border: #24383b;
+  --cv-border-strong: #395357;
+  --cv-text: #e8ece7;
+  --cv-muted: #9daead;
+  --cv-accent: #5fd0e0;
+  --cv-accent-soft: rgb(95 208 224 / 0.15);
+  --cv-danger: #ff7a70;
+  --cv-code-bg: #0a1214;
+  --cv-state-idle: #5b6f71;
+  --cv-state-active: #5fd0e0;
+  --cv-state-comparing: #ffb45c;
+  --cv-state-done: #7fd88e;
+  --cv-state-invalid: #ff6f6f;
+  --cv-state-call: #c3a6ff;
+  --cv-glow: rgb(95 208 224 / 0.16);
+  --cv-shadow: 0 18px 50px rgb(0 0 0 / 0.24);
+  --cv-shadow-soft: 0 10px 34px rgb(0 0 0 / 0.16);
 }
 
-/* Tailwind v4 语义色 → 工具类（bg-bg / text-text / border-border / fill-s-active …） */
+/* Tailwind v4 语义色 → 工具类 */
 @theme {
   --color-bg: var(--cv-bg);
   --color-surface: var(--cv-surface);
@@ -70,10 +79,10 @@
   --color-s-invalid: var(--cv-state-invalid);
   --color-s-call: var(--cv-state-call);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC",
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei",
     sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
     "Liberation Mono", monospace;
 }
 
@@ -83,13 +92,22 @@
   }
   html {
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   body {
     margin: 0;
     background-color: var(--cv-bg);
     color: var(--cv-text);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    letter-spacing: -0.006em;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.022em;
+    font-weight: 600;
   }
   code,
   pre,
@@ -117,9 +135,15 @@
 }
 
 @layer utilities {
+  /* 苹果风毛玻璃 */
   .glass {
-    background-color: color-mix(in srgb, var(--cv-surface) 86%, transparent);
-    backdrop-filter: blur(10px);
+    background-color: color-mix(in srgb, var(--cv-surface) 82%, transparent);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  }
+  /* 弥散阴影卡片 */
+  .cv-card {
+    box-shadow: var(--cv-shadow-soft);
   }
   .viz-transition {
     transition:
@@ -127,6 +151,10 @@
       fill 180ms ease,
       stroke 180ms ease,
       opacity 180ms ease;
+  }
+  /* 复古未来：电子青辉光 */
+  .glow-accent {
+    box-shadow: 0 0 0 1px rgb(95 208 224 / 0.35), 0 8px 32px var(--cv-glow);
   }
   /* Monaco 当前执行行高亮 */
   .cv-current-line {

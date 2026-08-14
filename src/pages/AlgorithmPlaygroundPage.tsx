@@ -256,19 +256,19 @@ export function AlgorithmPlaygroundPage() {
 
   const introContent: ReactNode = (
     <div className="flex flex-col gap-3">
-      <section className="rounded-xl border border-border bg-surface p-4">
+      <section className="rounded-2xl border border-border bg-surface p-4">
         <div className="grid gap-4 xl:grid-cols-[1fr_220px]">
           <p className="text-sm leading-relaxed text-text">{localize(meta.description)}</p>
           <ComplexityPanel meta={meta} />
         </div>
       </section>
-      <section className="rounded-xl border border-border bg-surface p-3">
+      <section className="rounded-2xl border border-border bg-surface p-3">
         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
           {t.panels.pseudocode}
         </h2>
         <PseudocodePanel pseudocode={meta.pseudocode} currentCodeLineId={currentCodeLineId} />
       </section>
-      <section className="rounded-xl border border-border bg-surface p-3">
+      <section className="rounded-2xl border border-border bg-surface p-3">
         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
           {t.panels.mistakes}
         </h2>
@@ -278,7 +278,7 @@ export function AlgorithmPlaygroundPage() {
   );
 
   const codeContent: ReactNode = (
-    <section className="flex min-h-64 flex-col rounded-xl border border-border bg-surface">
+    <section className="flex min-h-64 flex-col rounded-2xl border border-border bg-surface">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
         <LanguageSwitcher value={codeLang} onChange={setCodeLang} />
       </div>
@@ -300,7 +300,7 @@ export function AlgorithmPlaygroundPage() {
 
   const vizContent: ReactNode = (
     <div className="flex flex-col gap-3">
-      <section className="rounded-xl border border-border bg-surface p-3">
+      <section className="rounded-2xl border border-border bg-surface p-3">
         <InputBar
           meta={meta}
           rawInput={rawInput}
@@ -311,7 +311,7 @@ export function AlgorithmPlaygroundPage() {
           onAuxChange={setAuxRaw}
         />
       </section>
-      <section className="rounded-xl border border-border bg-surface p-3">
+      <section className="rounded-2xl border border-border bg-surface p-3">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-muted">
             {t.panels.containers}
@@ -336,7 +336,7 @@ export function AlgorithmPlaygroundPage() {
   return (
     <div className="flex flex-col gap-3">
       {/* 页头 */}
-      <header className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4">
+      <header className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4">
         <nav aria-label="breadcrumb" className="flex items-center gap-1 text-xs text-muted">
           <Link to="/algorithms" className="hover:text-text">
             {t.nav.algorithms}
@@ -386,14 +386,14 @@ export function AlgorithmPlaygroundPage() {
 
       {isDesktop ? (
         <div className="grid items-start gap-3 lg:grid-cols-[250px_minmax(0,1fr)_300px]">
-          <aside className="sticky top-16 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-xl border border-border bg-surface p-3">
+          <aside className="sticky top-16 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-border bg-surface p-3">
             <LeftSidebar activeId={meta.id} />
           </aside>
           <div className="flex min-w-0 flex-col gap-3">
             {introContent}
             <section className="grid gap-3 xl:grid-cols-2">
               {codeContent}
-              <section className="flex min-h-64 flex-col rounded-xl border border-border bg-surface">
+              <section className="flex min-h-64 flex-col rounded-2xl border border-border bg-surface">
                 <div className="border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
                   {t.panels.pseudocode}
                 </div>
@@ -410,7 +410,7 @@ export function AlgorithmPlaygroundPage() {
         </div>
       ) : (
         <TabbedPanels
-          className="rounded-xl border border-border bg-surface"
+          className="rounded-2xl border border-border bg-surface"
           contentClassName="max-h-[72vh]"
           active={mobileTab}
           onChange={setMobileTab}

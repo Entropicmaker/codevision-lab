@@ -106,7 +106,7 @@ export function AlgorithmsPage() {
               <Link
                 key={meta.id}
                 to={`/algorithms/${meta.id}`}
-                className="group flex flex-col gap-2 rounded-xl border border-border bg-surface p-4 transition hover:border-borderstrong hover:shadow-lg"
+                className="group flex flex-col gap-2 rounded-2xl border border-border bg-surface cv-card p-4 transition hover:border-borderstrong hover:shadow-lg"
               >
                 <div className="flex items-center gap-2">
                   <h2 className="text-base font-semibold text-text">{localize(meta.name)}</h2>

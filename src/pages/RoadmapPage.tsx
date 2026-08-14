@@ -151,7 +151,7 @@ export function RoadmapPage() {
       {/* 视口 */}
       <div
         ref={containerRef}
-        className="h-[62vh] rounded-xl border border-border bg-surface"
+        className="h-[62vh] rounded-2xl border border-border bg-surface"
       >
         <DragZoomViewport view={view} onViewChange={setView} className="h-full w-full">
           <SkillTree items={items} completed={completedAlgorithms} searchQuery={query} />

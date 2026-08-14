@@ -35,7 +35,7 @@ export function ExercisesPage() {
             <Link
               key={exercise.lessonId}
               to={`/learn/${exercise.lessonId}`}
-              className="rounded-xl border border-border bg-surface p-4 transition hover:border-borderstrong"
+              className="rounded-2xl border border-border bg-surface p-4 transition hover:border-borderstrong"
             >
               <h2 className="text-sm font-semibold text-text">{exercise.title.zh}</h2>
               <p className="mt-1 text-xs text-muted">{exercise.prompt.zh}</p>
