@@ -1,25 +1,41 @@
 import { Link } from 'react-router-dom';
 import { lessonMetas } from '../content/lessons/registry';
 import { useI18n } from '../hooks/useI18n';
+import { BookPage, BookSection, BookEntry } from '../components/layout/BookPage';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Button } from '../components/ui/Button';
-import { IconListCheck } from '../components/ui/Icons';
+import { IconChevronRight, IconListCheck } from '../components/ui/Icons';
 
-/** 练习题：聚合课程知识点的小练习 */
+/** 练习题：书籍目录式排版（按语言分章聚合课程练习） */
 export function ExercisesPage() {
-  const { t } = useI18n();
-  const exercises = lessonMetas.flatMap((lesson) => [
-    { lessonId: lesson.id, title: lesson.title, prompt: lesson.exercise.prompt },
-  ]);
+  const { t, locale, localize } = useI18n();
+
+  const byLanguage = new Map<string, typeof lessonMetas>();
+  for (const lesson of lessonMetas) {
+    const list = byLanguage.get(lesson.language) ?? [];
+    list.push(lesson);
+    byLanguage.set(lesson.language, list);
+  }
+
+  const languageName = (lang: string): string =>
+    lang === 'cpp' ? 'C++' : lang === 'csharp' ? 'C#' : 'Python';
+
+  const toc = Array.from(byLanguage.entries()).map(([lang, list]) => ({
+    id: lang,
+    label: languageName(lang),
+    count: list.length,
+  }));
+
+  let entryNumber = 0;
 
   return (
-    <div className="flex flex-col gap-4">
-      <header>
-        <h1 className="text-2xl font-bold">{t.exercises.title}</h1>
-        <p className="mt-1 text-sm text-muted">{t.exercises.subtitle}</p>
-      </header>
-
-      {exercises.length === 0 ? (
+    <BookPage
+      kicker={t.nav.exercises}
+      title={t.exercises.title}
+      subtitle={t.exercises.subtitle}
+      toc={toc}
+    >
+      {lessonMetas.length === 0 ? (
         <EmptyState
           icon={<IconListCheck size={30} />}
           title={t.exercises.empty}
@@ -30,19 +46,46 @@ export function ExercisesPage() {
           }
         />
       ) : (
-        <div className="grid gap-2 sm:grid-cols-2">
-          {exercises.map((exercise) => (
-            <Link
-              key={exercise.lessonId}
-              to={`/learn/${exercise.lessonId}`}
-              className="rounded-2xl border border-border bg-surface p-4 transition hover:border-borderstrong"
-            >
-              <h2 className="text-sm font-semibold text-text">{exercise.title.zh}</h2>
-              <p className="mt-1 text-xs text-muted">{exercise.prompt.zh}</p>
-            </Link>
-          ))}
-        </div>
+        Array.from(byLanguage.entries()).map(([lang, list], li) => (
+          <BookSection
+            key={lang}
+            id={lang}
+            index={li + 1}
+            title={languageName(lang)}
+            right={`${list.length} ${locale === 'zh' ? '题' : 'exercises'}`}
+          >
+            {list.map((lesson) => {
+              entryNumber += 1;
+              return (
+                <BookEntry
+                  key={lesson.id}
+                  number={String(entryNumber).padStart(2, '0')}
+                  title={
+                    <Link
+                      to={`/learn/${lesson.language}/${lesson.id}`}
+                      className="group inline-flex items-center gap-2 hover:underline"
+                    >
+                      <span>{localize(lesson.title)}</span>
+                      <IconChevronRight
+                        size={14}
+                        className="text-muted opacity-0 transition-opacity group-hover:opacity-100"
+                      />
+                    </Link>
+                  }
+                  description={
+                    <>
+                      {localize(lesson.exercise.prompt)}
+                      <span className="ml-2 text-accent">
+                        {locale === 'zh' ? '含参考答案 →' : 'with answer →'}
+                      </span>
+                    </>
+                  }
+                />
+              );
+            })}
+          </BookSection>
+        ))
       )}
-    </div>
+    </BookPage>
   );
 }

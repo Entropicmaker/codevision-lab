@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { algorithmMetas } from '../content/algorithms/registry';
 import { useI18n } from '../hooks/useI18n';
+import { BookPage, BookSection, BookEntry } from '../components/layout/BookPage';
 import { Badge } from '../components/ui/Badge';
+import { IconChevronRight } from '../components/ui/Icons';
 
 interface StructureInfo {
   id: string;
@@ -75,57 +77,73 @@ const STRUCTURES: StructureInfo[] = [
   },
 ];
 
-/** 数据结构浏览页 */
+/** 数据结构：书籍目录式排版 */
 export function StructuresPage() {
   const { t, locale } = useI18n();
 
-  return (
-    <div className="flex flex-col gap-4">
-      <header>
-        <h1 className="text-2xl font-bold">{t.nav.dataStructures}</h1>
-        <p className="mt-1 text-sm text-muted">
-          {locale === 'zh'
-            ? '按结构类型浏览：理解每种结构的特性与适用场景，并进入对应的交互式可视化。'
-            : 'Browse by structure type: understand each structure and jump into its interactive visualizations.'}
-        </p>
-      </header>
+  const toc = STRUCTURES.map((s) => ({
+    id: s.id,
+    label: s.name[locale],
+    count: algorithmMetas.filter((m) => s.categories.includes(m.category)).length,
+  }));
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {STRUCTURES.map((structure) => {
-          const related = algorithmMetas.filter((m) =>
-            structure.categories.includes(m.category),
-          );
-          return (
-            <section
-              key={structure.id}
-              className="flex flex-col gap-2 rounded-2xl border border-border bg-surface cv-card p-4"
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-xl" aria-hidden>
-                  {structure.icon}
+  return (
+    <BookPage
+      kicker={t.nav.dataStructures}
+      title={t.nav.dataStructures}
+      subtitle={
+        locale === 'zh'
+          ? '按结构类型浏览：理解每种结构的特性与适用场景，并进入对应的交互式可视化。'
+          : 'Browse by structure type: understand each structure and jump into its interactive visualizations.'
+      }
+      toc={toc}
+    >
+      {STRUCTURES.map((structure, si) => {
+        const related = algorithmMetas.filter((m) =>
+          structure.categories.includes(m.category),
+        );
+        return (
+          <BookSection
+            key={structure.id}
+            id={structure.id}
+            index={si + 1}
+            title={structure.name[locale]}
+            right={
+              related.length > 0
+                ? `${related.length} ${locale === 'zh' ? '个可视化' : 'visualizations'}`
+                : undefined
+            }
+          >
+            <BookEntry
+              title={
+                <span className="inline-flex items-center gap-2">
+                  <span aria-hidden>{structure.icon}</span>
+                  <span>{structure.name[locale]}</span>
                 </span>
-                <h2 className="text-base font-semibold">{structure.name[locale]}</h2>
-              </div>
-              <p className="text-xs leading-relaxed text-muted">{structure.description[locale]}</p>
-              {related.length > 0 ? (
-                <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
-                  {related.map((meta) => (
-                    <Link key={meta.id} to={`/algorithms/${meta.id}`}>
-                      <Badge tone="accent" className="hover:opacity-80">
-                        {meta.name[locale]}
-                      </Badge>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <p className="mt-auto pt-2 text-[11px] text-muted/70">
-                  {locale === 'zh' ? '可视化演示即将上线' : 'Visualization coming soon'}
-                </p>
-              )}
-            </section>
-          );
-        })}
-      </div>
-    </div>
+              }
+              description={structure.description[locale]}
+              action={
+                related.length > 0 ? (
+                  <span className="flex flex-wrap items-center gap-1.5">
+                    {related.map((meta) => (
+                      <Link key={meta.id} to={`/algorithms/${meta.id}`}>
+                        <Badge tone="accent" className="inline-flex items-center gap-0.5 hover:opacity-80">
+                          {meta.name[locale]}
+                          <IconChevronRight size={11} />
+                        </Badge>
+                      </Link>
+                    ))}
+                  </span>
+                ) : (
+                  <span className="text-[11px] italic text-muted/50">
+                    {locale === 'zh' ? '可视化演示整理中' : 'visualizations in progress'}
+                  </span>
+                )
+              }
+            />
+          </BookSection>
+        );
+      })}
+    </BookPage>
   );
 }
