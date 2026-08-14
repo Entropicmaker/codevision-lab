@@ -132,11 +132,25 @@ export interface LinearStructureSnapshot {
   capacity?: number;
 }
 
+/** 哈希表：桶 + 冲突链（每个桶内 items 即冲突链顺序） */
+export interface HashTableSnapshot {
+  kind: 'hash-table';
+  id: string;
+  /** 桶数量（数组大小） */
+  size: number;
+  buckets: Array<{ index: number; items: DisplayItem[] }>;
+  /** 元素 id → 哈希计算式标注（如 "23 % 7 = 2"） */
+  hashNotes?: Record<string, string>;
+  /** 最近操作的桶下标 */
+  activeBucket?: number;
+}
+
 export type StructureSnapshot =
   | LinearStructureSnapshot
   | TreeSnapshot
   | GraphSnapshot
-  | TableSnapshot;
+  | TableSnapshot
+  | HashTableSnapshot;
 
 /** 算法操作类型（用于步骤说明图标/文案） */
 export type OperationType =

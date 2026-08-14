@@ -7,6 +7,10 @@ import { test, expect } from '@playwright/test';
  */
 const ALGORITHM_IDS = [
   'bubble-sort',
+  'selection-sort',
+  'insertion-sort',
+  'merge-sort',
+  'quick-sort',
   'binary-search',
   'two-pointers',
   'sliding-window',

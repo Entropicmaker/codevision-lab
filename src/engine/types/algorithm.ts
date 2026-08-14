@@ -97,7 +97,9 @@ export type VisualKind =
   | 'linked-list'
   | 'tree'
   | 'graph'
-  | 'table';
+  | 'table'
+  | 'heap'
+  | 'hash-table';
 
 /** 技能树节点（与算法/课程内容共用） */
 export interface RoadmapNode {

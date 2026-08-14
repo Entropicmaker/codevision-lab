@@ -9,6 +9,8 @@ import { LinkedListRenderer } from './LinkedList';
 import { TreeRenderer } from './Tree';
 import { GraphRenderer } from './Graph';
 import { TableRenderer } from './Table';
+import { HeapRenderer } from './Heap';
+import { HashTableRenderer } from './HashTable';
 
 /**
  * 渲染器注册表：visualKind → 渲染组件。
@@ -32,6 +34,10 @@ export function renderVisual(kind: VisualKind, step: AlgorithmStep | null): Reac
       return <GraphRenderer step={step} />;
     case 'table':
       return <TableRenderer step={step} />;
+    case 'heap':
+      return <HeapRenderer step={step} />;
+    case 'hash-table':
+      return <HashTableRenderer step={step} />;
     default: {
       const exhaustive: never = kind;
       return exhaustive;

@@ -7,8 +7,8 @@ test.describe('学习路线图', () => {
   test('路线图加载、节点点击进入算法实验室', async ({ page }) => {
     await page.goto('/roadmap');
     await expect(page.getByText('学习路线图')).toBeVisible();
-    // 点击冒泡排序节点
-    await page.getByRole('link', { name: /冒泡排序/ }).click();
+    // 点击冒泡排序节点（精确 href，避免依赖链副标题重名）
+    await page.locator('a[href="/algorithms/bubble-sort"]').first().click();
     await expect(page).toHaveURL(/\/algorithms\/bubble-sort/);
   });
 

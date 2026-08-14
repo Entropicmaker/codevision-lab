@@ -1,5 +1,7 @@
 import type { AlgorithmMeta, CategoryId } from '../../engine/types/algorithm';
 import { bubbleSortMeta } from './bubble-sort';
+import { selectionSortMeta } from './selection-sort';
+import { insertionSortMeta } from './insertion-sort';
 import { binarySearchMeta } from './binary-search';
 import { twoPointersMeta } from './two-pointers';
 import { slidingWindowMeta } from './sliding-window';
@@ -11,10 +13,14 @@ import { fibonacciMeta } from './fibonacci';
 import { knapsackMeta } from './knapsack';
 import { linkedListOpsMeta } from './linked-list-ops';
 import { treeTraversalMeta } from './tree-traversal';
+import { quickSortMeta } from './quick-sort';
+import { mergeSortMeta } from './merge-sort';
 
 /** 全部算法元数据（内容注册表，新增算法在此登记） */
 export const algorithmMetas: AlgorithmMeta[] = [
   bubbleSortMeta,
+  selectionSortMeta,
+  insertionSortMeta,
   binarySearchMeta,
   twoPointersMeta,
   slidingWindowMeta,
@@ -26,6 +32,8 @@ export const algorithmMetas: AlgorithmMeta[] = [
   knapsackMeta,
   linkedListOpsMeta,
   treeTraversalMeta,
+  quickSortMeta,
+  mergeSortMeta,
 ];
 
 export function getAlgorithmMeta(id: string): AlgorithmMeta | undefined {

@@ -1,5 +1,7 @@
 import type { AlgorithmRunner } from '../types/step';
 import { runBubbleSort } from './bubbleSort';
+import { runSelectionSort } from './selectionSort';
+import { runInsertionSort } from './insertionSort';
 import { runBinarySearch } from './binarySearch';
 import { runTwoPointers } from './twoPointers';
 import { runSlidingWindow } from './slidingWindow';
@@ -11,10 +13,14 @@ import { runLinkedListOps } from './linkedListOps';
 import { runTreeTraversal } from './treeTraversal';
 import { runFibonacci } from './fibonacci';
 import { runKnapsack } from './knapsack';
+import { runQuickSort } from './quickSort';
+import { runMergeSort } from './mergeSort';
 
 /** Runner 注册表：meta.runnerId → 执行器 */
 const runners: Record<string, AlgorithmRunner> = {
   'bubble-sort': runBubbleSort,
+  'selection-sort': runSelectionSort,
+  'insertion-sort': runInsertionSort,
   'binary-search': runBinarySearch,
   'two-pointers': runTwoPointers,
   'sliding-window': runSlidingWindow,
@@ -26,6 +32,8 @@ const runners: Record<string, AlgorithmRunner> = {
   'tree-traversal': runTreeTraversal,
   'fibonacci': runFibonacci,
   'knapsack': runKnapsack,
+  'quick-sort': runQuickSort,
+  'merge-sort': runMergeSort,
 };
 
 export function getRunner(runnerId: string): AlgorithmRunner | undefined {
