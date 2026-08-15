@@ -74,7 +74,8 @@ export function AlgorithmPlaygroundPage() {
     [algorithmId],
   );
   const { t, locale, localize, fmt } = useI18n();
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  // 三栏实验室需要足够横向空间；手机、平板与小桌面统一使用标签式阅读流。
+  const isWideDesktop = useMediaQuery('(min-width: 1280px)');
 
   const codeLang = useSettings((s) => s.codeLang);
   const setCodeLang = useSettings((s) => s.setCodeLang);
@@ -278,7 +279,7 @@ export function AlgorithmPlaygroundPage() {
   );
 
   const codeContent: ReactNode = (
-    <section className="flex min-h-64 flex-col rounded-2xl border border-border bg-surface">
+    <section className="flex min-h-[360px] flex-col rounded-2xl border border-border bg-surface md:min-h-[480px] xl:min-h-64">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
         <LanguageSwitcher value={codeLang} onChange={setCodeLang} />
       </div>
@@ -336,7 +337,7 @@ export function AlgorithmPlaygroundPage() {
   return (
     <div className="flex flex-col gap-3">
       {/* 页头 */}
-      <header className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4">
+      <header className="coordinate-frame surface-panel flex flex-col gap-3 p-4 sm:p-5">
         <nav aria-label="breadcrumb" className="flex items-center gap-1 text-xs text-muted">
           <Link to="/algorithms" className="hover:text-text">
             {t.nav.algorithms}
@@ -357,7 +358,7 @@ export function AlgorithmPlaygroundPage() {
           <button
             type="button"
             onClick={() => toggleFavorite(meta.id)}
-            className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted transition hover:border-borderstrong hover:text-amber-500"
+            className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted transition hover:border-borderstrong hover:bg-surface2 hover:text-amber-500"
             title={isFavorite ? t.common.unfavorite : t.common.favorite}
             aria-pressed={isFavorite}
           >
@@ -384,9 +385,9 @@ export function AlgorithmPlaygroundPage() {
         )}
       </header>
 
-      {isDesktop ? (
-        <div className="grid items-start gap-3 lg:grid-cols-[250px_minmax(0,1fr)_300px]">
-          <aside className="sticky top-16 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-border bg-surface p-3">
+      {isWideDesktop ? (
+        <div className="grid items-start gap-3 xl:grid-cols-[240px_minmax(0,1fr)_292px]">
+          <aside className="sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto rounded-2xl border border-border bg-surface p-3">
             <LeftSidebar activeId={meta.id} />
           </aside>
           <div className="flex min-w-0 flex-col gap-3">
@@ -404,14 +405,14 @@ export function AlgorithmPlaygroundPage() {
             </section>
             {vizContent}
           </div>
-          <aside className="sticky top-16 max-h-[calc(100vh-6rem)] overflow-y-auto">
+          <aside className="sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto">
             <RightStatusPanel meta={meta} current={currentStep} previous={previousStep} />
           </aside>
         </div>
       ) : (
         <TabbedPanels
-          className="rounded-2xl border border-border bg-surface"
-          contentClassName="max-h-[72vh]"
+          className="surface-panel overflow-hidden"
+          contentClassName="overflow-visible"
           active={mobileTab}
           onChange={setMobileTab}
           items={[

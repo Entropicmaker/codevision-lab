@@ -6,13 +6,16 @@ import { useI18n } from '../../hooks/useI18n';
 export function AppLayout(): ReactNode {
   const { t } = useI18n();
   return (
-    <div className="flex min-h-screen flex-col bg-bg text-text">
+    <div className="app-frame flex min-h-screen flex-col text-text">
       <TopNav />
-      <main className="mx-auto w-full max-w-[1600px] flex-1 px-3 py-4 sm:px-4 lg:py-6">
+      <main className="site-shell w-full flex-1 py-4 sm:py-6 lg:py-8">
         <Outlet />
       </main>
-      <footer className="border-t border-border py-4 text-center text-xs text-muted">
-        {t.footer.note}
+      <footer className="site-shell py-6 text-xs text-muted">
+        <div className="flex flex-col gap-2 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-mono tracking-[0.14em]">CODEVISION / FIELD NOTE 01</span>
+          <span>{t.footer.note}</span>
+        </div>
       </footer>
     </div>
   );

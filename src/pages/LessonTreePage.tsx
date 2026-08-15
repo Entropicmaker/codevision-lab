@@ -46,16 +46,16 @@ export function LessonTreePage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 sm:gap-8">
       {/* 书籍封面区 */}
-      <header className="flex flex-col gap-4 border-b border-border pb-6">
+      <header className="coordinate-frame surface-panel retro-grid flex flex-col gap-5 overflow-hidden p-5 sm:p-7">
         <div className="flex flex-wrap items-center gap-2">
           {LANGS.map((l) => (
             <Link
               key={l.id}
               to={`/learn/${l.id}`}
               className={cn(
-                'rounded-lg border px-4 py-2 transition-colors',
+                'inline-flex min-h-11 items-center rounded-full border px-4 py-2 transition-colors',
                 l.id === language
                   ? 'border-accent/60 bg-accentsoft'
                   : 'border-border hover:border-borderstrong',
@@ -73,19 +73,19 @@ export function LessonTreePage() {
           ))}
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted">{t.nav.lessons}</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight">{current?.name}</h1>
-          <p className="mt-1 text-sm text-muted">
+          <p className="micro-label text-accent">{t.nav.lessons} / archive</p>
+          <h1 className="font-editorial mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">{current?.name}</h1>
+          <p className="mt-2 text-sm leading-7 text-muted">
             {current?.subtitle} · {t.lessons.subtitle}
           </p>
         </div>
       </header>
 
-      <div className="grid items-start gap-8 lg:grid-cols-[264px_minmax(0,1fr)]">
+      <div className="grid items-start gap-8 xl:grid-cols-[244px_minmax(0,1fr)] xl:gap-12">
         {/* 目录（书籍式侧栏） */}
         <nav
           aria-label={t.nav.lessons}
-          className="top-20 hidden max-h-[calc(100vh-7rem)] flex-col gap-4 overflow-y-auto border-l-2 border-border pl-4 lg:sticky lg:flex"
+          className="top-24 hidden max-h-[calc(100vh-8rem)] flex-col gap-4 overflow-y-auto border-l border-border pl-4 xl:sticky xl:flex"
         >
           {groups.map((group) => (
             <div key={group.id} className="flex flex-col gap-1">
@@ -97,7 +97,7 @@ export function LessonTreePage() {
                   key={chapter.id}
                   type="button"
                   onClick={() => scrollTo(chapter.id)}
-                  className="flex items-baseline gap-2 rounded-md px-1.5 py-1 text-left text-xs text-muted transition-colors hover:bg-surface2 hover:text-text"
+                  className="flex min-h-9 items-center gap-2 rounded-xl px-2 py-2 text-left text-xs text-muted transition-colors hover:bg-surface2 hover:text-text"
                 >
                   <span className="font-mono text-[10px] text-muted/60">
                     {String(group.chapters.indexOf(chapter) + 1).padStart(2, '0')}
@@ -110,8 +110,8 @@ export function LessonTreePage() {
         </nav>
 
         {/* 移动端目录（折叠） */}
-        <details className="rounded-lg border border-border bg-surface px-3 py-2 lg:hidden">
-          <summary className="cursor-pointer select-none text-sm font-medium text-text">
+        <details className="surface-panel px-4 py-2 xl:hidden">
+          <summary className="cursor-pointer select-none py-1 text-sm font-semibold text-text">
             {locale === 'zh' ? '目录' : 'Contents'}
           </summary>
           <div className="mt-2 flex flex-col gap-1 border-t border-border pt-2">
@@ -121,7 +121,7 @@ export function LessonTreePage() {
                   key={chapter.id}
                   type="button"
                   onClick={() => scrollTo(chapter.id)}
-                  className="flex items-baseline gap-2 rounded-md px-1.5 py-1 text-left text-xs text-muted hover:bg-surface2 hover:text-text"
+                  className="flex min-h-10 items-center gap-2 rounded-xl px-2 py-2 text-left text-xs text-muted hover:bg-surface2 hover:text-text"
                 >
                   <span className="font-mono text-[10px] text-muted/60">
                     {String(group.chapters.indexOf(chapter) + 1).padStart(2, '0')}
@@ -142,7 +142,7 @@ export function LessonTreePage() {
                 <span className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                   PART {gi + 1}
                 </span>
-                <h2 className="text-2xl font-bold tracking-tight">{localize(group.title)}</h2>
+                <h2 className="font-editorial text-2xl font-semibold tracking-tight">{localize(group.title)}</h2>
                 <span className="ml-auto text-xs text-muted/70">
                   {group.chapters.length} {locale === 'zh' ? '章' : 'chapters'}
                 </span>
@@ -156,26 +156,26 @@ export function LessonTreePage() {
                     <article
                       key={chapter.id}
                       id={`ch-${chapter.id}`}
-                      className="scroll-mt-20 border-b border-border/60 py-6 last:border-b-0"
+                      className="scroll-mt-24 border-b border-border/60 py-6 last:border-b-0"
                     >
                       {/* 章：大编号 + 大标题（层级高于小节） */}
                       <div className="flex items-baseline gap-4">
                         <span className="shrink-0 font-mono text-2xl font-bold leading-none text-accent">
                           {String(chapterNumber).padStart(2, '0')}
                         </span>
-                        <h3 className="text-xl font-semibold leading-snug tracking-tight">
+                        <h3 className="font-editorial text-xl font-semibold leading-snug tracking-tight">
                           {localize(chapter.title)}
                         </h3>
                       </div>
 
                       {/* 已上线的知识点（可学习链接，小节层级） */}
                       {chapterLessons.length > 0 && (
-                        <div className="mt-3 flex flex-col gap-1 pl-10">
+                        <div className="mt-3 flex flex-col gap-1 sm:pl-10">
                           {chapterLessons.map((lesson, li) => (
                             <Link
                               key={lesson.id}
                               to={`/learn/${language}/${lesson.id}`}
-                              className="group flex items-baseline gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-surface2"
+                              className="group flex min-h-11 items-center gap-2 rounded-xl px-2 py-2 transition-colors hover:bg-surface2 sm:gap-3"
                             >
                               <span className="w-8 shrink-0 text-right font-mono text-[11px] text-muted/70">
                                 {chapterNumber}.{li + 1}
@@ -200,7 +200,7 @@ export function LessonTreePage() {
                       )}
 
                       {/* 章节主题一览 */}
-                      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 pl-12">
+                      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 sm:pl-12">
                         {chapter.topics.map((topic) => (
                           <span key={topic} className="text-[11px] text-muted/80">
                             {topic}

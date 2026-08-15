@@ -20,7 +20,7 @@ export function Tabs({
   return (
     <div
       role="tablist"
-      className={cn('flex items-center gap-1 border-b border-border', className)}
+      className={cn('flex items-center gap-1 overflow-x-auto border-b border-border bg-surface/90 px-1 backdrop-blur', className)}
     >
       {items.map((item) => (
         <button
@@ -30,7 +30,7 @@ export function Tabs({
           aria-selected={active === item.id}
           onClick={() => onChange(item.id)}
           className={cn(
-            'relative -mb-px border-b-2 px-3 py-2 text-sm transition-colors',
+            'relative -mb-px min-h-11 flex-1 whitespace-nowrap border-b-2 px-3 py-2 text-sm transition-colors',
             active === item.id
               ? 'border-accent font-medium text-text'
               : 'border-transparent text-muted hover:text-text',
@@ -65,7 +65,7 @@ export function TabbedPanels({
   return (
     <div className={cn('flex min-h-0 flex-col', className)}>
       <Tabs items={items} active={current.id} onChange={onChange} />
-      <div className={cn('min-h-0 flex-1 overflow-auto', contentClassName)}>
+      <div className={cn('min-h-0 flex-1 overflow-visible', contentClassName)}>
         {current?.content}
       </div>
     </div>

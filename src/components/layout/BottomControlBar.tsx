@@ -43,31 +43,46 @@ export function BottomControlBar({
   const statusLabel = t.playback.status[status];
 
   const controlButton =
-    'inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-surface px-2 text-muted transition-colors hover:border-borderstrong hover:text-text disabled:cursor-not-allowed disabled:opacity-35';
+    'inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-border bg-surface px-2 text-muted transition-colors hover:border-borderstrong hover:bg-surface2 hover:text-text disabled:cursor-not-allowed disabled:opacity-35';
 
   return (
-    <div className="glass sticky bottom-0 z-40 border-t border-border">
-      <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2">
-        {/* 状态与步骤计数 */}
-        <div className="flex min-w-28 items-center gap-2" data-testid="step-counter">
-          <span
-            className={cn(
-              'h-2 w-2 rounded-full',
-              status === 'playing' && 'animate-pulse bg-emerald-500',
-              status === 'paused' && 'bg-amber-500',
-              status === 'finished' && 'bg-emerald-500',
-              status === 'idle' && 'bg-muted/50',
-            )}
-            aria-hidden
+    <div className="glass safe-bottom sticky bottom-0 z-40 border-t border-border shadow-[0_-12px_42px_rgba(0,0,0,0.08)]">
+      <div className="site-shell flex flex-col gap-2 py-2 lg:flex-row lg:items-center lg:gap-3">
+        <div className="flex items-center gap-3 lg:contents">
+          {/* 状态与步骤计数 */}
+          <div className="flex shrink-0 items-center gap-2" data-testid="step-counter">
+            <span
+              className={cn(
+                'h-2 w-2 rounded-full',
+                status === 'playing' && 'animate-pulse bg-emerald-500',
+                status === 'paused' && 'bg-amber-500',
+                status === 'finished' && 'bg-emerald-500',
+                status === 'idle' && 'bg-muted/50',
+              )}
+              aria-hidden
+            />
+            <span className="hidden text-xs font-medium text-text sm:inline">{statusLabel}</span>
+            <span className="font-mono text-[11px] tabular-nums text-muted">
+              {fmt(t.playback.stepOf, { current: index + (total > 0 ? 1 : 0), total })}
+            </span>
+          </div>
+
+          {/* 进度 slider */}
+          <input
+            type="range"
+            min={0}
+            max={Math.max(0, total - 1)}
+            step={1}
+            value={Math.min(index, Math.max(0, total - 1))}
+            onChange={(e) => controller.jumpTo(Number(e.target.value))}
+            disabled={!hasSteps}
+            className="h-1 min-w-0 flex-1 cursor-pointer accent-[var(--cv-accent)] disabled:cursor-not-allowed disabled:opacity-35 lg:min-w-24"
+            aria-label={t.playback.stepOf}
           />
-          <span className="hidden text-xs font-medium text-text sm:inline">{statusLabel}</span>
-          <span className="font-mono text-[11px] tabular-nums text-muted">
-            {fmt(t.playback.stepOf, { current: index + (total > 0 ? 1 : 0), total })}
-          </span>
         </div>
 
         {/* 控制按钮 */}
-        <div className="flex items-center gap-1">
+        <div className="flex w-full items-center justify-center gap-1 lg:w-auto">
           <button
             type="button"
             className={controlButton}
@@ -92,7 +107,7 @@ export function BottomControlBar({
           </button>
           <button
             type="button"
-            className="inline-flex h-10 min-w-20 items-center justify-center gap-1.5 rounded-lg bg-accent px-3 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-35"
+            className="inline-flex h-11 min-w-20 flex-1 items-center justify-center gap-1.5 rounded-xl bg-accent px-3 text-sm font-semibold text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-35 sm:max-w-28 lg:flex-none"
             onClick={() => controller.toggle()}
             disabled={!hasSteps}
             title={t.common.play}
@@ -136,71 +151,59 @@ export function BottomControlBar({
           </button>
         </div>
 
-        {/* 进度 slider */}
-        <input
-          type="range"
-          min={0}
-          max={Math.max(0, total - 1)}
-          step={1}
-          value={Math.min(index, Math.max(0, total - 1))}
-          onChange={(e) => controller.jumpTo(Number(e.target.value))}
-          disabled={!hasSteps}
-          className="h-1 min-w-24 flex-1 cursor-pointer accent-[var(--cv-accent)] disabled:cursor-not-allowed disabled:opacity-35"
-          aria-label={t.playback.stepOf}
-        />
+        <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-2 lg:border-0 lg:pt-0">
+          {/* 速度 */}
+          <div className="flex min-w-0 flex-1 items-center gap-2 lg:flex-none">
+            <span className="text-[10px] text-muted sm:text-[11px]">{t.playback.speedLabel}</span>
+            <input
+              type="range"
+              min={SPEED_MIN}
+              max={SPEED_MAX}
+              step={0.25}
+              value={speed}
+              onChange={(e) => onSpeedChange(Number(e.target.value))}
+              className="h-1 min-w-16 max-w-28 flex-1 cursor-pointer accent-[var(--cv-accent)] lg:w-20"
+              aria-label={t.playback.speedLabel}
+            />
+            <span className="w-8 font-mono text-[10px] tabular-nums text-muted sm:w-12 sm:text-[11px]">
+              {speed.toFixed(2)}<span className="hidden sm:inline"> {t.playback.speedUnit}</span>
+            </span>
+          </div>
 
-        {/* 速度 */}
-        <div className="flex items-center gap-2">
-          <span className="hidden text-[11px] text-muted sm:inline">{t.playback.speedLabel}</span>
-          <input
-            type="range"
-            min={SPEED_MIN}
-            max={SPEED_MAX}
-            step={0.25}
-            value={speed}
-            onChange={(e) => onSpeedChange(Number(e.target.value))}
-            className="h-1 w-16 cursor-pointer accent-[var(--cv-accent)] sm:w-20"
-            aria-label={t.playback.speedLabel}
-          />
-          <span className="hidden w-12 font-mono text-[11px] tabular-nums text-muted sm:inline">
-            {speed.toFixed(2)} {t.playback.speedUnit}
-          </span>
-        </div>
-
-        {/* 自动播放（循环） */}
-        <button
-          type="button"
-          role="switch"
-          aria-checked={loop}
-          onClick={() => onLoopChange(!loop)}
-          className={cn(
-            'inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs transition-colors',
-            loop
-              ? 'border-accent/50 bg-accentsoft font-medium text-accent'
-              : 'border-border bg-surface text-muted hover:text-text',
-          )}
-        >
-          <span
+          {/* 自动播放（循环） */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={loop}
+            onClick={() => onLoopChange(!loop)}
             className={cn(
-              'relative inline-block h-3.5 w-6 rounded-full transition-colors',
-              loop ? 'bg-accent' : 'bg-borderstrong',
+              'inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border px-2.5 text-xs transition-colors',
+              loop
+                ? 'border-accent/50 bg-accentsoft font-medium text-accent'
+                : 'border-border bg-surface text-muted hover:text-text',
             )}
-            aria-hidden
           >
             <span
               className={cn(
-                'absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all',
-                loop ? 'left-3' : 'left-0.5',
+                'relative inline-block h-3.5 w-6 rounded-full transition-colors',
+                loop ? 'bg-accent' : 'bg-borderstrong',
               )}
-            />
-          </span>
-          <span className="hidden sm:inline">{t.common.autoplay}</span>
-        </button>
+              aria-hidden
+            >
+              <span
+                className={cn(
+                  'absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all',
+                  loop ? 'left-3' : 'left-0.5',
+                )}
+              />
+            </span>
+            <span className="hidden sm:inline">{t.common.autoplay}</span>
+          </button>
 
-        {/* 快捷键帮助 */}
-        <Button size="sm" variant="ghost" icon={<IconKeyboard size={14} />} onClick={onShowShortcuts} className="hidden md:inline-flex">
-          {t.playground.shortcutHelp}
-        </Button>
+          <Button size="sm" variant="ghost" icon={<IconKeyboard size={14} />} onClick={onShowShortcuts} className="hidden xl:inline-flex">
+            {t.playground.shortcutHelp}
+          </Button>
+        </div>
       </div>
     </div>
   );

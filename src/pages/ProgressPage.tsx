@@ -26,10 +26,11 @@ export function ProgressPage() {
   const isEmpty = completedEntries.length === 0 && favoriteMetas.length === 0;
 
   return (
-    <div className="flex flex-col gap-5">
-      <header>
-        <h1 className="text-2xl font-bold">{t.progress.title}</h1>
-        <p className="mt-1 text-sm text-muted">{t.progress.subtitle}</p>
+    <div className="flex flex-col gap-5 sm:gap-7">
+      <header className="coordinate-frame surface-panel retro-grid p-5 sm:p-7">
+        <p className="micro-label text-accent">Personal archive / local</p>
+        <h1 className="font-editorial mt-2 text-3xl font-semibold sm:text-5xl">{t.progress.title}</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{t.progress.subtitle}</p>
       </header>
 
       {isEmpty ? (
@@ -45,7 +46,7 @@ export function ProgressPage() {
       ) : (
         <>
           {/* 总体进度 */}
-          <section className="rounded-2xl border border-border bg-surface cv-card p-4">
+          <section className="surface-panel p-4 sm:p-5">
             <div className="mb-2 flex items-center justify-between text-sm">
               <span className="font-medium text-text">{t.progress.overall}</span>
               <span className="font-mono text-muted">
@@ -90,12 +91,12 @@ export function ProgressPage() {
                     <Link
                       key={id}
                       to={`/algorithms/${id}`}
-                      className="flex items-center gap-2.5 rounded-2xl border border-border bg-surface cv-card px-3 py-2.5 transition hover:border-borderstrong"
+                      className="interactive-card surface-panel flex flex-col items-start gap-2.5 px-4 py-3 sm:flex-row sm:items-center"
                     >
                       <span className="font-medium text-text">{localize(meta.name)}</span>
                       <DifficultyBadge difficulty={meta.difficulty} />
-                      <span className="ml-auto flex flex-col items-end text-[10px] text-muted">
-                        <span>{t.algorithms.lastInput}: {record.lastInput || '—'}</span>
+                      <span className="flex max-w-full flex-col items-start text-[10px] text-muted sm:ml-auto sm:items-end">
+                        <span className="max-w-full truncate">{t.algorithms.lastInput}: {record.lastInput || '—'}</span>
                         <span>{new Date(record.doneAt).toLocaleString()}</span>
                       </span>
                     </Link>
@@ -117,7 +118,7 @@ export function ProgressPage() {
                   <Link
                     key={meta.id}
                     to={`/algorithms/${meta.id}`}
-                    className="flex items-center gap-2.5 rounded-2xl border border-border bg-surface cv-card px-3 py-2.5 transition hover:border-borderstrong"
+                    className="interactive-card surface-panel flex flex-wrap items-center gap-2.5 px-4 py-3"
                   >
                     <span className="font-medium text-text">{localize(meta.name)}</span>
                     <Badge tone="accent">{t.algorithms.categories[meta.category]}</Badge>

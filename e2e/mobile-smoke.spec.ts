@@ -52,11 +52,19 @@ test.describe('移动端冒泡排序', () => {
     // 找一个视口内的节点并点击
     const nodes = page.locator('a[href^="/algorithms/"]');
     const count = await nodes.count();
+    const viewport = page.viewportSize() ?? { width: 390, height: 844 };
     let clicked = false;
     for (let i = 0; i < count && !clicked; i += 1) {
       const box = await nodes.nth(i).boundingBox();
       // 节点大部分在视口内即可（修复后最小缩放保证 152px 宽）
-      if (box && box.width >= 100 && box.x > -100 && box.x < 390 && box.y > 60 && box.y < 844) {
+      if (
+        box &&
+        box.width >= 100 &&
+        box.x > -100 &&
+        box.x < viewport.width &&
+        box.y > 60 &&
+        box.y < viewport.height
+      ) {
         await nodes.nth(i).click({ force: true });
         await page.waitForTimeout(700);
         clicked = page.url().includes('/algorithms/');
@@ -77,5 +85,20 @@ test.describe('移动端冒泡排序', () => {
     }
     await page.getByTestId('btn-next').click();
     await expect(page.getByTestId('step-counter')).toContainText('第 2 /');
+  });
+
+  test('手机与平板核心页面无横向溢出', async ({ page }) => {
+    for (const path of ['/', '/algorithms', '/learn/cpp', '/roadmap', '/algorithms/bubble-sort']) {
+      await page.goto(path);
+      await page.waitForLoadState('domcontentloaded');
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        content: document.documentElement.scrollWidth,
+      }));
+      expect(
+        dimensions.content,
+        `${path} 横向内容宽度 ${dimensions.content}px 超出视口 ${dimensions.viewport}px`,
+      ).toBeLessThanOrEqual(dimensions.viewport + 1);
+    }
   });
 });

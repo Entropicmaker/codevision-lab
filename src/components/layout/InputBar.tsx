@@ -104,13 +104,13 @@ export function InputBar({
   return (
     <div className="flex flex-col gap-2">
       {/* 输入行 */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
         <label htmlFor="algo-input" className="text-xs font-medium text-muted">
           {t.playground.inputLabel}
         </label>
-        <div className="flex min-w-0 flex-1 items-center gap-1.5">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
           {!arrayOnly && (
-            <div className="relative min-w-0 flex-1">
+            <div className="relative min-w-0 flex-1 basis-44">
               <IconEdit size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 id="algo-input"
@@ -120,7 +120,7 @@ export function InputBar({
                   if (e.key === 'Enter') onApply(rawInput);
                 }}
                 placeholder={placeholder}
-                className="h-9 w-full rounded-lg border border-border bg-surface pl-8 pr-3 font-mono text-sm text-text placeholder:text-muted/60 focus:border-accent focus:outline-none"
+                className="h-11 w-full rounded-xl border border-border bg-surface pl-8 pr-3 font-mono text-sm text-text placeholder:text-muted/60 focus:border-accent focus:outline-none"
                 spellCheck={false}
               />
             </div>
@@ -141,7 +141,7 @@ export function InputBar({
                   if (e.key === 'Enter') onApply(rawInput);
                 }}
                 inputMode="numeric"
-                className="h-9 w-20 rounded-lg border border-border bg-surface px-2.5 font-mono text-sm text-text focus:border-accent focus:outline-none"
+                className="h-11 w-20 rounded-xl border border-border bg-surface px-2.5 font-mono text-sm text-text focus:border-accent focus:outline-none"
                 spellCheck={false}
               />
             </div>
@@ -150,13 +150,13 @@ export function InputBar({
             {t.common.applyInput}
           </Button>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:ml-auto">
           {meta.inputSpec.kind === 'int-array' && (
             <select
               value={size}
               onChange={(e) => setSize(Number(e.target.value))}
               aria-label={t.playground.dataSize}
-              className="h-8 rounded-md border border-border bg-surface px-1.5 text-xs text-muted focus:border-accent focus:outline-none"
+              className="h-10 rounded-xl border border-border bg-surface px-2 text-xs text-muted focus:border-accent focus:outline-none"
             >
               {SIZES.map((s) => (
                 <option key={s.value} value={s.value}>
@@ -177,7 +177,7 @@ export function InputBar({
             <span className="hidden md:inline">{copied ? t.common.copied : t.common.share}</span>
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setImportOpen(true)} title={t.playground.importCase}>
-            <span className="hidden md:inline">{t.playground.importCase}</span>
+            <span>{t.playground.importCase}</span>
           </Button>
         </div>
       </div>

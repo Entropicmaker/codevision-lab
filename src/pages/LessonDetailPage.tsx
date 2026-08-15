@@ -35,8 +35,8 @@ export function LessonDetailPage() {
   const example = lesson.codeExamples[codeLang];
 
   return (
-    <div className="flex flex-col gap-3">
-      <header className="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-4">
+    <div className="flex flex-col gap-4">
+      <header className="coordinate-frame surface-panel flex flex-col gap-3 p-4 sm:p-6">
         <nav aria-label="breadcrumb" className="flex items-center gap-1 text-xs text-muted">
           <Link to={`/learn/${lesson.language}`} className="hover:text-text">
             {t.nav.lessons} · {lesson.language === 'cpp' ? 'C++' : lesson.language === 'csharp' ? 'C#' : 'Python'}
@@ -45,7 +45,7 @@ export function LessonDetailPage() {
           {chapter && <span className="text-text">{localize(chapter.title)}</span>}
         </nav>
         <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-xl font-bold">{localize(lesson.title)}</h1>
+          <h1 className="font-editorial text-2xl font-semibold sm:text-3xl">{localize(lesson.title)}</h1>
           <DifficultyBadge difficulty={lesson.difficulty} />
           {isDone && (
             <Badge tone="done">
@@ -57,7 +57,7 @@ export function LessonDetailPage() {
       </header>
 
       {/* 概念说明 */}
-      <section className="rounded-2xl border border-border bg-surface p-4">
+      <section className="surface-panel p-4 sm:p-5">
         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
           {locale === 'zh' ? '概念说明' : 'Concept'}
         </h2>
@@ -71,7 +71,7 @@ export function LessonDetailPage() {
       </section>
 
       {/* 代码示例 */}
-      <section className="flex min-h-72 flex-col rounded-2xl border border-border bg-surface">
+      <section className="surface-panel flex min-h-[380px] flex-col overflow-hidden sm:min-h-[460px]">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
           <LanguageSwitcher value={codeLang} onChange={setCodeLang} withDemoNote={false} />
         </div>
@@ -89,11 +89,11 @@ export function LessonDetailPage() {
 
       {/* 三语言对比 */}
       {lesson.comparison.length > 0 && (
-        <section className="overflow-x-auto rounded-2xl border border-border bg-surface">
+        <section className="surface-panel overflow-x-auto">
           <h2 className="border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
             {locale === 'zh' ? '三语言写法对比' : 'Cross-language comparison'}
           </h2>
-          <table className="w-full text-xs">
+          <table className="w-full min-w-[680px] text-xs">
             <thead>
               <tr className="border-b border-border text-left text-muted">
                 <th className="px-3 py-2 font-medium">{locale === 'zh' ? '要点' : 'Aspect'}</th>
@@ -120,7 +120,7 @@ export function LessonDetailPage() {
 
       {/* 常见错误 */}
       {lesson.commonMistakes.length > 0 && (
-        <section className="rounded-2xl border border-border bg-surface p-3">
+        <section className="surface-panel p-3 sm:p-4">
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
             {t.panels.mistakes}
           </h2>
@@ -157,12 +157,13 @@ export function LessonDetailPage() {
         </details>
       </Panel>
 
-      <div className="flex justify-end">
+      <div className="flex justify-stretch sm:justify-end">
         <Button
           variant={isDone ? 'secondary' : 'primary'}
           icon={isDone ? <IconCheck size={15} /> : undefined}
           onClick={() => markLessonComplete(lesson.id)}
           disabled={isDone}
+          className="w-full sm:w-auto"
         >
           {isDone ? t.common.completed : locale === 'zh' ? '标记为已学完' : 'Mark as completed'}
         </Button>

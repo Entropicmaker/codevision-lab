@@ -127,8 +127,8 @@ export function LabPage() {
   })();
 
   const demoModeCard = (name: string, desc: string) => (
-    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">
-      <h2 className="text-lg font-semibold">{name}</h2>
+    <div className="surface-panel flex flex-col gap-3 p-5 sm:p-6">
+      <h2 className="font-editorial text-xl font-semibold">{name}</h2>
       <p className="max-w-xl text-sm leading-relaxed text-muted">{desc}</p>
       <div className="flex items-start gap-2 rounded-lg border border-border bg-surface2/60 px-3 py-2 text-xs text-muted">
         <IconInfo size={14} className="mt-0.5 shrink-0 text-accent" />
@@ -142,9 +142,10 @@ export function LabPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <header>
-        <h1 className="text-2xl font-bold">{t.lab.title}</h1>
-        <p className="mt-1 text-sm text-muted">{t.lab.subtitle}</p>
+      <header className="coordinate-frame surface-panel retro-grid p-5 sm:p-7">
+        <p className="micro-label text-accent">Live coding / workbench</p>
+        <h1 className="font-editorial mt-2 text-3xl font-semibold sm:text-5xl">{t.lab.title}</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{t.lab.subtitle}</p>
       </header>
 
       <Tabs
@@ -159,7 +160,7 @@ export function LabPage() {
 
       {tab === 'python' ? (
         <div className="grid items-start gap-3 xl:grid-cols-[1fr_320px]">
-          <section className="flex min-h-96 flex-col rounded-2xl border border-border bg-surface">
+          <section className="surface-panel flex min-h-[460px] flex-col overflow-hidden">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-semibold text-text">{t.lab.python.name}</h2>

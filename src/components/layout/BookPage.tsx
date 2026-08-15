@@ -37,33 +37,33 @@ export function BookPage({
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 sm:gap-8">
       {/* 封面区 */}
-      <header className="flex flex-col gap-4 border-b border-border pb-6">
+      <header className="coordinate-frame surface-panel retro-grid flex flex-col gap-4 overflow-hidden p-5 sm:p-7">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted">{kicker}</p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight">{title}</h1>
-            {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
+            <p className="micro-label text-accent">{kicker} / index</p>
+            <h1 className="font-editorial mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
+            {subtitle && <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{subtitle}</p>}
           </div>
           {toolbar && <div className="min-w-0">{toolbar}</div>}
         </div>
       </header>
 
-      <div className="grid items-start gap-8 lg:grid-cols-[264px_minmax(0,1fr)]">
+      <div className="grid items-start gap-8 xl:grid-cols-[244px_minmax(0,1fr)] xl:gap-12">
         {/* 目录（书籍式侧栏） */}
         <nav
           aria-label={kicker}
-          className="top-20 hidden max-h-[calc(100vh-7rem)] flex-col gap-4 overflow-y-auto border-l-2 border-border pl-4 lg:sticky lg:flex"
+          className="top-24 hidden max-h-[calc(100vh-8rem)] flex-col gap-4 overflow-y-auto border-l border-border pl-4 xl:sticky xl:flex"
         >
-          {toolbar && <div className="min-w-0 lg:hidden">{toolbar}</div>}
+          <span className="micro-label text-muted">Contents / {String(toc.length).padStart(2, '0')}</span>
           <div className="flex flex-col gap-1">
             {toc.map((entry) => (
               <button
                 key={entry.id}
                 type="button"
                 onClick={() => scrollTo(entry.id)}
-                className="flex items-baseline gap-2 rounded-md px-1.5 py-1 text-left text-xs text-muted transition-colors hover:bg-surface2 hover:text-text"
+                className="flex min-h-9 items-baseline gap-2 rounded-xl px-2 py-2 text-left text-xs text-muted transition-colors hover:bg-surface2 hover:text-text"
               >
                 <span className="leading-snug">{entry.label}</span>
                 {entry.count !== undefined && (
@@ -75,8 +75,8 @@ export function BookPage({
         </nav>
 
         {/* 移动端目录（折叠） */}
-        <details className="rounded-2xl border border-border bg-surface px-3 py-2 lg:hidden">
-          <summary className="cursor-pointer select-none text-sm font-medium text-text">
+        <details className="surface-panel px-4 py-2 xl:hidden">
+          <summary className="cursor-pointer select-none py-1 text-sm font-semibold text-text">
             {locale === 'zh' ? '目录' : 'Contents'}
           </summary>
           <div className="mt-2 flex flex-col gap-1 border-t border-border pt-2">
@@ -85,7 +85,7 @@ export function BookPage({
                 key={entry.id}
                 type="button"
                 onClick={() => scrollTo(entry.id)}
-                className="flex items-baseline gap-2 rounded-md px-1.5 py-1 text-left text-xs text-muted hover:bg-surface2 hover:text-text"
+                className="flex min-h-10 items-center gap-2 rounded-xl px-2 py-2 text-left text-xs text-muted hover:bg-surface2 hover:text-text"
               >
                 {entry.label}
                 {entry.count !== undefined && (
@@ -118,13 +118,13 @@ export function BookSection({
   children: ReactNode;
 }) {
   return (
-    <section id={`sec-${id}`} className="mb-10 scroll-mt-20">
+    <section id={`sec-${id}`} className="mb-10 scroll-mt-24 sm:mb-12">
       {/* 章头：大号编号 + 大标题，层级一目了然 */}
-      <div className="mb-4 flex items-baseline gap-4 border-b-2 border-border pb-3">
-        <span className="shrink-0 font-mono text-2xl font-bold leading-none text-accent">
+      <div className="mb-3 flex flex-wrap items-baseline gap-3 border-b border-border pb-3 sm:mb-4 sm:gap-4">
+        <span className="shrink-0 font-mono text-xl font-bold leading-none text-accent sm:text-2xl">
           {String(index).padStart(2, '0')}
         </span>
-        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+        <h2 className="font-editorial text-xl font-semibold tracking-tight sm:text-2xl">{title}</h2>
         {right && <span className="ml-auto text-xs text-muted/70">{right}</span>}
       </div>
       <div className="flex flex-col">{children}</div>
@@ -155,13 +155,13 @@ export function BookEntry({
   return (
     <article
       className={cn(
-        'flex flex-col gap-1.5 border-b border-border/60 py-4 last:border-b-0',
-        indent && 'ml-6',
+        'flex flex-col gap-2 border-b border-border/60 py-4 last:border-b-0 sm:py-5',
+        indent && 'sm:ml-6',
       )}
     >
-      <div className="flex flex-wrap items-baseline gap-3">
+      <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
         {number && (
-          <span className="w-9 shrink-0 text-right font-mono text-[11px] text-muted/70">{number}</span>
+          <span className="shrink-0 font-mono text-[10px] text-muted/70 sm:w-9 sm:text-right">{number}</span>
         )}
         {accentDot && (
           <span
@@ -172,13 +172,13 @@ export function BookEntry({
         )}
         <h3 className="text-base font-medium leading-snug text-text/90">{title}</h3>
         {meta && <span className="flex flex-wrap items-center gap-1.5">{meta}</span>}
-        {action && <span className="ml-auto">{action}</span>}
+        {action && <span className="w-full pt-1 sm:ml-auto sm:w-auto sm:pt-0">{action}</span>}
       </div>
       {description && (
         <div
           className={cn(
             'text-xs leading-relaxed text-muted',
-            number ? 'pl-12' : indent ? 'pl-6' : 'pl-0',
+            number ? 'pl-0 sm:pl-12' : indent ? 'pl-0 sm:pl-6' : 'pl-0',
           )}
         >
           {description}

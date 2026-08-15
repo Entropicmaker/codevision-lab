@@ -54,12 +54,24 @@ export function RoadmapPage() {
   const fitView = useCallback(() => {
     const { w, h } = containerSize;
     if (w <= 0 || h <= 0) return;
-    // 小屏需要更大的最小缩放，保证技能树节点可读可点（节点 224px 宽）
-    const minUsableScale = w < 768 ? 0.68 : MIN_SCALE;
+    // 小屏优先展示一个清晰可点的起始节点，而不是把整棵宽树缩成不可读的缩略图。
+    if (w < 1200) {
+      const scale = w < 640 ? 0.74 : 0.82;
+      const start = items.find((item) => item.prerequisites.length === 0) ?? items[0];
+      const pos = start ? layout.positions[start.id] : undefined;
+      if (pos) {
+        setView({
+          scale,
+          x: w / 2 - (pos.x + 112) * scale,
+          y: 54 - pos.y * scale,
+        });
+        return;
+      }
+    }
     const scale = Math.min(
       1.2,
       Math.max(
-        minUsableScale,
+        MIN_SCALE,
         Math.min((w - 48) / layout.width, (h - 48) / layout.height),
       ),
     );
@@ -68,7 +80,7 @@ export function RoadmapPage() {
       x: (w - layout.width * scale) / 2,
       y: (h - layout.height * scale) / 2,
     });
-  }, [containerSize, layout]);
+  }, [containerSize, items, layout]);
 
   useEffect(() => {
     fitView();
@@ -111,15 +123,16 @@ export function RoadmapPage() {
   };
 
   return (
-    <div className="flex flex-col gap-3">
-      <header>
-        <h1 className="text-2xl font-bold">{t.roadmap.title}</h1>
-        <p className="mt-1 text-sm text-muted">{t.roadmap.subtitle}</p>
+    <div className="flex flex-col gap-4">
+      <header className="coordinate-frame surface-panel retro-grid p-5 sm:p-7">
+        <p className="micro-label text-accent">Learning route / map 01</p>
+        <h1 className="font-editorial mt-2 text-3xl font-semibold sm:text-5xl">{t.roadmap.title}</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{t.roadmap.subtitle}</p>
       </header>
 
       {/* 工具栏 */}
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative">
+      <div className="surface-panel flex flex-wrap items-center gap-2 p-3">
+        <div className="relative w-full sm:w-64">
           <IconSearch size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
           <input
             value={query}
@@ -128,18 +141,18 @@ export function RoadmapPage() {
               if (e.key === 'Enter') handleSearchSubmit();
             }}
             placeholder={t.roadmap.searchPlaceholder}
-            className="h-9 w-56 rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-text placeholder:text-muted/60 focus:border-accent focus:outline-none"
+            className="h-11 w-full rounded-xl border border-border bg-surface pl-9 pr-3 text-sm text-text placeholder:text-muted/60 focus:border-accent focus:outline-none"
           />
         </div>
-        <Button size="sm" icon={<IconFit size={14} />} onClick={fitView}>
+        <Button size="sm" icon={<IconFit size={14} />} onClick={fitView} className="flex-1 sm:flex-none">
           {t.roadmap.fitView}
         </Button>
-        <Button size="sm" icon={<IconMinus size={14} />} onClick={() => zoomBy(1 / 1.25)} title={t.roadmap.zoomOut} />
-        <Button size="sm" icon={<IconPlus size={14} />} onClick={() => zoomBy(1.25)} title={t.roadmap.zoomIn} />
-        <Button size="sm" icon={<IconReset size={14} />} onClick={fitView}>
-          {t.roadmap.resetView}
+        <Button size="sm" icon={<IconMinus size={14} />} onClick={() => zoomBy(1 / 1.25)} title={t.roadmap.zoomOut} aria-label={t.roadmap.zoomOut} />
+        <Button size="sm" icon={<IconPlus size={14} />} onClick={() => zoomBy(1.25)} title={t.roadmap.zoomIn} aria-label={t.roadmap.zoomIn} />
+        <Button size="sm" icon={<IconReset size={14} />} onClick={fitView} aria-label={t.roadmap.resetView}>
+          <span className="hidden sm:inline">{t.roadmap.resetView}</span>
         </Button>
-        <div className="ml-auto flex items-center gap-3 text-xs text-muted">
+        <div className="flex w-full flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-2 text-[11px] text-muted sm:ml-auto sm:w-auto sm:border-0 sm:pt-0">
           <span>{fmt(t.roadmap.nodes, { count: items.length })}</span>
           <span className="flex items-center gap-2">
             {t.roadmap.legend}:
@@ -156,7 +169,7 @@ export function RoadmapPage() {
       {/* 视口 */}
       <div
         ref={containerRef}
-        className="h-[62vh] rounded-2xl border border-border bg-surface"
+        className="h-[58dvh] min-h-[440px] overflow-hidden rounded-[20px] border border-border bg-surface shadow-[var(--cv-shadow-soft)] sm:h-[64vh]"
       >
         <DragZoomViewport view={view} onViewChange={setView} className="h-full w-full">
           <SkillTree items={items} completed={completedAlgorithms} searchQuery={query} />
