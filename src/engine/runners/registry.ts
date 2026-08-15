@@ -21,6 +21,8 @@ import { runHeapSort } from './heapSort';
 import { runHashTable } from './hashTable';
 import { runBellmanFord } from './bellmanFord';
 import { runFloydWarshall } from './floydWarshall';
+import { runPrim } from './prim';
+import { runKruskal } from './kruskal';
 
 /** Runner 注册表：meta.runnerId → 执行器 */
 const runners: Record<string, AlgorithmRunner> = {
@@ -46,6 +48,8 @@ const runners: Record<string, AlgorithmRunner> = {
   'hash-table': runHashTable,
   'bellman-ford': runBellmanFord,
   'floyd-warshall': runFloydWarshall,
+  'prim': runPrim,
+  'kruskal': runKruskal,
 };
 
 export function getRunner(runnerId: string): AlgorithmRunner | undefined {

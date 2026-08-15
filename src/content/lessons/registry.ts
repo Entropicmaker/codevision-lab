@@ -33,11 +33,20 @@ import { csharpDelegatesLesson } from './csharp-delegates';
 import { csharpStructureLesson } from './csharp-structure';
 import { csharpOperatorsLesson } from './csharp-operators';
 import { csharpLoopsLesson } from './csharp-loops';
+import { csharpArraysLesson } from './csharp-arrays';
+import { csharpStringsLesson } from './csharp-strings';
+import { csharpCollectionsLesson } from './csharp-collections';
 import { pythonContainersLesson } from './python-containers';
 import { pythonGeneratorsLesson } from './python-generators';
 import { pythonStructureLesson } from './python-structure';
 import { pythonPrimitivesLesson } from './python-primitives';
 import { pythonFlowLesson } from './python-flow';
+import { pythonSlicingLesson } from './python-slicing';
+import { pythonComprehensionsLesson } from './python-comprehensions';
+import { pythonFunctionsLesson } from './python-functions';
+import { cppConditionalsLesson } from './cpp-conditionals';
+import { cppLoopsLesson } from './cpp-loops';
+import { cppFunctionsLesson } from './cpp-functions';
 
 export const lessonMetas: LessonMeta[] = [
   cppVarsLesson,
@@ -47,6 +56,9 @@ export const lessonMetas: LessonMeta[] = [
   csharpStructureLesson,
   csharpOperatorsLesson,
   csharpLoopsLesson,
+  csharpArraysLesson,
+  csharpStringsLesson,
+  csharpCollectionsLesson,
   pythonContainersLesson,
   pythonGeneratorsLesson,
   pythonStructureLesson,
@@ -55,6 +67,12 @@ export const lessonMetas: LessonMeta[] = [
   cppHelloLesson,
   cppOperatorsLesson,
   cppIoLesson,
+  pythonSlicingLesson,
+  pythonComprehensionsLesson,
+  pythonFunctionsLesson,
+  cppConditionalsLesson,
+  cppLoopsLesson,
+  cppFunctionsLesson,
 ];
 
 export function getLessonMeta(id: string): LessonMeta | undefined {

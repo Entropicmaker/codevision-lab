@@ -21,6 +21,8 @@ import { heapSortMeta } from './heap-sort';
 import { hashTableMeta } from './hash-table';
 import { bellmanFordMeta } from './bellman-ford';
 import { floydWarshallMeta } from './floyd-warshall';
+import { primMeta } from './prim';
+import { kruskalMeta } from './kruskal';
 
 /** 全部算法元数据（内容注册表，新增算法在此登记） */
 export const algorithmMetas: AlgorithmMeta[] = [
@@ -46,6 +48,8 @@ export const algorithmMetas: AlgorithmMeta[] = [
   hashTableMeta,
   bellmanFordMeta,
   floydWarshallMeta,
+  primMeta,
+  kruskalMeta,
 ];
 
 export function getAlgorithmMeta(id: string): AlgorithmMeta | undefined {

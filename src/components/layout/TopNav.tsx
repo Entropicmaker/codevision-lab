@@ -50,10 +50,9 @@ export function TopNav() {
   return (
     <header className="glass sticky top-0 z-50 border-b border-border">
       <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:px-4">
-        {/* Logo */}
-        <Link to="/" className="flex shrink-0 items-center gap-2.5">
-          <img src="/favicon.svg" alt="" className="h-7 w-7" />
-          <span className="hidden flex-col leading-tight sm:flex">
+        {/* Logo（纯文字） */}
+        <Link to="/" className="flex shrink-0 items-center">
+          <span className="flex flex-col leading-tight">
             <span className="text-sm font-semibold tracking-wide text-text">{t.appNameEn}</span>
             <span className="text-[10px] text-muted">{t.appName}</span>
           </span>

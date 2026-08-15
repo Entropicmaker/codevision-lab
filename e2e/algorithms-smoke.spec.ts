@@ -28,6 +28,8 @@ const ALGORITHM_IDS = [
   'dijkstra',
   'bellman-ford',
   'floyd-warshall',
+  'prim',
+  'kruskal',
 ];
 
 test.describe('全部算法冒烟测试', () => {

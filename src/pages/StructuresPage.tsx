@@ -9,7 +9,8 @@ interface StructureInfo {
   id: string;
   name: { zh: string; en: string };
   description: { zh: string; en: string };
-  categories: string[];
+  /** 关联的算法 id（显式） */
+  algorithms: string[];
   icon: string;
 }
 
@@ -22,7 +23,7 @@ const STRUCTURES: StructureInfo[] = [
       zh: '连续内存中的同类型元素序列，支持 O(1) 随机访问。排序、二分搜索、双指针、滑动窗口都建立在数组之上。',
       en: 'A contiguous sequence of same-typed elements with O(1) random access. Sorting, binary search, two pointers and sliding windows are all built on arrays.',
     },
-    categories: ['array', 'sorting', 'searching', 'two-pointers', 'sliding-window'],
+    algorithms: ['bubble-sort', 'selection-sort', 'insertion-sort', 'merge-sort', 'quick-sort', 'heap-sort', 'binary-search', 'two-pointers', 'sliding-window'],
     icon: '▦',
   },
   {
@@ -32,7 +33,7 @@ const STRUCTURES: StructureInfo[] = [
       zh: '后进先出（LIFO）的线性结构，只允许在栈顶插入和删除。用于函数调用栈、括号匹配、DFS、撤销操作。',
       en: 'A LIFO linear structure that only allows push/pop at the top. Used in call stacks, bracket matching, DFS and undo.',
     },
-    categories: ['stack'],
+    algorithms: ['stack-demo', 'tree-traversal', 'dfs'],
     icon: '⥮',
   },
   {
@@ -42,7 +43,7 @@ const STRUCTURES: StructureInfo[] = [
       zh: '先进先出（FIFO）的线性结构，队尾入、队首出。用于 BFS、任务调度、生产者消费者模型。',
       en: 'A FIFO linear structure: enqueue at the rear, dequeue at the front. Used in BFS, scheduling and producer-consumer models.',
     },
-    categories: ['queue'],
+    algorithms: ['queue-demo', 'bfs', 'topological-sort'],
     icon: '⇥',
   },
   {
@@ -52,7 +53,7 @@ const STRUCTURES: StructureInfo[] = [
       zh: '由节点和指针串联的链式结构，插入删除 O(1)，但不支持随机访问。是理解指针与对象引用的最佳载体。',
       en: 'A chain of nodes linked by pointers with O(1) insert/delete but no random access — the best vehicle for understanding pointers.',
     },
-    categories: ['linked-list'],
+    algorithms: ['linked-list-ops'],
     icon: '⛓',
   },
   {
@@ -62,8 +63,28 @@ const STRUCTURES: StructureInfo[] = [
       zh: '每个节点最多两个孩子的层次结构。递归遍历是回溯、分治、DFS 的起点；二叉搜索树与堆是其重要变体。',
       en: 'A hierarchy where each node has at most two children. Recursive traversal is the gateway to backtracking, divide-and-conquer and DFS.',
     },
-    categories: ['tree'],
+    algorithms: ['tree-traversal', 'heap-sort'],
     icon: '🌳',
+  },
+  {
+    id: 'hash-table',
+    name: { zh: '哈希表', en: 'Hash Table' },
+    description: {
+      zh: '通过哈希函数把键映射到桶，实现接近 O(1) 的查找、插入与删除。冲突用拉链法或开放寻址解决，是字典与集合的底层结构。',
+      en: 'A hash function maps keys to buckets, giving near-O(1) lookup, insert and delete. Collisions are handled by chaining or open addressing — the backbone of dictionaries and sets.',
+    },
+    algorithms: ['hash-table'],
+    icon: '⌗',
+  },
+  {
+    id: 'heap',
+    name: { zh: '堆', en: 'Heap' },
+    description: {
+      zh: '满足堆性质的完全二叉树：大顶堆的每个父节点都不小于孩子。堆顶 O(1) 取最值，是优先队列与堆排序的核心结构。',
+      en: 'A complete binary tree satisfying the heap property: in a max-heap every parent is no smaller than its children. The root gives the extreme in O(1) — the core of priority queues and heap sort.',
+    },
+    algorithms: ['heap-sort'],
+    icon: '⛰',
   },
   {
     id: 'graph',
@@ -72,7 +93,7 @@ const STRUCTURES: StructureInfo[] = [
       zh: '节点与边的网络模型，表达社交关系、地图、依赖关系。DFS/BFS 是图算法的基础，最短路与最小生成树是其延伸。',
       en: 'A network of nodes and edges modeling maps, social links and dependencies. DFS/BFS are the foundation; shortest paths extend them.',
     },
-    categories: ['graph'],
+    algorithms: ['dfs', 'bfs', 'topological-sort', 'dijkstra', 'bellman-ford', 'floyd-warshall'],
     icon: '🕸',
   },
 ];
@@ -84,7 +105,7 @@ export function StructuresPage() {
   const toc = STRUCTURES.map((s) => ({
     id: s.id,
     label: s.name[locale],
-    count: algorithmMetas.filter((m) => s.categories.includes(m.category)).length,
+    count: s.algorithms.filter((id) => algorithmMetas.some((m) => m.id === id)).length,
   }));
 
   return (
@@ -99,9 +120,9 @@ export function StructuresPage() {
       toc={toc}
     >
       {STRUCTURES.map((structure, si) => {
-        const related = algorithmMetas.filter((m) =>
-          structure.categories.includes(m.category),
-        );
+        const related = structure.algorithms
+          .map((id) => algorithmMetas.find((m) => m.id === id))
+          .filter((m): m is NonNullable<typeof m> => m !== undefined);
         return (
           <BookSection
             key={structure.id}
