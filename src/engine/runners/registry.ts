@@ -23,6 +23,9 @@ import { runBellmanFord } from './bellmanFord';
 import { runFloydWarshall } from './floydWarshall';
 import { runPrim } from './prim';
 import { runKruskal } from './kruskal';
+import { runNQueens } from './nQueens';
+import { runKmp } from './kmp';
+import { runActivitySelection } from './activitySelection';
 
 /** Runner 注册表：meta.runnerId → 执行器 */
 const runners: Record<string, AlgorithmRunner> = {
@@ -50,6 +53,9 @@ const runners: Record<string, AlgorithmRunner> = {
   'floyd-warshall': runFloydWarshall,
   'prim': runPrim,
   'kruskal': runKruskal,
+  'n-queens': runNQueens,
+  'kmp': runKmp,
+  'activity-selection': runActivitySelection,
 };
 
 export function getRunner(runnerId: string): AlgorithmRunner | undefined {

@@ -23,6 +23,9 @@ import { bellmanFordMeta } from './bellman-ford';
 import { floydWarshallMeta } from './floyd-warshall';
 import { primMeta } from './prim';
 import { kruskalMeta } from './kruskal';
+import { nQueensMeta } from './n-queens';
+import { kmpMeta } from './kmp';
+import { activitySelectionMeta } from './activity-selection';
 
 /** 全部算法元数据（内容注册表，新增算法在此登记） */
 export const algorithmMetas: AlgorithmMeta[] = [
@@ -50,6 +53,9 @@ export const algorithmMetas: AlgorithmMeta[] = [
   floydWarshallMeta,
   primMeta,
   kruskalMeta,
+  nQueensMeta,
+  kmpMeta,
+  activitySelectionMeta,
 ];
 
 export function getAlgorithmMeta(id: string): AlgorithmMeta | undefined {

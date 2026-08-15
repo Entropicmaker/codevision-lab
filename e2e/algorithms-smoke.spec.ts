@@ -30,6 +30,9 @@ const ALGORITHM_IDS = [
   'floyd-warshall',
   'prim',
   'kruskal',
+  'kmp',
+  'n-queens',
+  'activity-selection',
 ];
 
 test.describe('全部算法冒烟测试', () => {

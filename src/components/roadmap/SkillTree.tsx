@@ -29,6 +29,7 @@ export const GROUP_COLS: Array<{ title: { zh: string; en: string }; categories: 
   { title: { zh: '二叉树', en: 'Binary Tree' }, categories: ['tree'] },
   { title: { zh: '图', en: 'Graph' }, categories: ['graph'] },
   { title: { zh: '动态规划', en: 'Dynamic Programming' }, categories: ['dp'] },
+  { title: { zh: '回溯与贪心', en: 'Backtracking & Greedy' }, categories: ['backtracking', 'greedy'] },
 ];
 
 const NODE_W = 224;

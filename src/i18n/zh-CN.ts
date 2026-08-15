@@ -211,6 +211,8 @@ export const zhCN = {
       tree: '二叉树',
       graph: '图',
       dp: '动态规划',
+      backtracking: '回溯',
+      greedy: '贪心',
     },
   },
 

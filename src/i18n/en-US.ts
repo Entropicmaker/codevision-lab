@@ -219,6 +219,8 @@ export const enUS: Dict = {
       tree: 'Binary tree',
       graph: 'Graph',
       dp: 'Dynamic programming',
+      backtracking: 'Backtracking',
+      greedy: 'Greedy',
     },
   },
 

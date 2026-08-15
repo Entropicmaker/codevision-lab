@@ -96,12 +96,52 @@ export function edgesToInput(edges: EdgePair[]): string {
 }
 
 /** 按 inputSpec.kind 生成随机输入字符串 */
+function randomAlphabetString(len: number, alphabet = 'AB'): string {
+  let state = Math.floor(Math.random() * 0x7fffffff);
+  const next = (): number => {
+    state ^= state << 13;
+    state ^= state >>> 17;
+    state ^= state << 5;
+    return (state >>> 0) / 0xffffffff;
+  };
+  let out = '';
+  for (let i = 0; i < len; i += 1) {
+    out += alphabet[Math.floor(next() * alphabet.length)];
+  }
+  return out;
+}
+
 export function randomInputForSpec(spec: InputFieldSpec): string {
   switch (spec.kind) {
     case 'tree-array':
       return treeToInput(randomTreeArray(11));
     case 'edge-list':
       return edgesToInput(randomEdgeList(6, 2));
+    case 'string-pair': {
+      // 随机文本 + 从文本中截取的模式（保证随机案例也能演示匹配）
+      const text = randomAlphabetString(10 + Math.floor(Math.random() * 5));
+      const start = Math.floor(Math.random() * (text.length - 2));
+      const pattern = text.slice(start, start + 2 + Math.floor(Math.random() * 2));
+      return `${text}|${pattern}`;
+    }
+    case 'interval-list': {
+      // 随机活动区间：start < end
+      let state = Math.floor(Math.random() * 0x7fffffff);
+      const next = (): number => {
+        state ^= state << 13;
+        state ^= state >>> 17;
+        state ^= state << 5;
+        return (state >>> 0) / 0xffffffff;
+      };
+      const count = 8;
+      const intervals: string[] = [];
+      for (let i = 0; i < count; i += 1) {
+        const start = Math.floor(next() * 13);
+        const end = start + 1 + Math.floor(next() * 4);
+        intervals.push(`${start}-${end}`);
+      }
+      return intervals.join(', ');
+    }
     case 'int-array':
     default:
       return arrayToInput(randomIntArray(spec, 8));

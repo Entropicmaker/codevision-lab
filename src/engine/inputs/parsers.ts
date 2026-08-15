@@ -117,7 +117,50 @@ export function parseEdgeList(raw: string, spec: InputFieldSpec): ParseResult<Ed
   return { ok: true, value: edges };
 }
 
-export type AnyInputValue = number[] | (number | null)[] | EdgePair[];
+/** 字符串对输入：`文本|模式`（如 ABABABC|ABA） */
+export function parseStringPair(raw: string): ParseResult<{ text: string; pattern: string }> {
+  const trimmed = raw.trim();
+  if (trimmed === '') return { ok: false, error: { key: 'emptyInput' } };
+  const idx = trimmed.indexOf('|');
+  if (idx <= 0 || idx === trimmed.length - 1) {
+    return { ok: false, error: { key: 'invalidArray' } };
+  }
+  const text = trimmed.slice(0, idx).trim();
+  const pattern = trimmed.slice(idx + 1).trim();
+  if (text === '' || pattern === '' || pattern.length > text.length) {
+    return { ok: false, error: { key: 'invalidArray' } };
+  }
+  return { ok: true, value: { text, pattern } };
+}
+
+/** 区间列表输入：`1-4, 3-5`（start-end 对，start < end） */
+export function parseIntervalList(raw: string, spec: InputFieldSpec): ParseResult<Array<[number, number]>> {
+  const trimmed = raw.trim();
+  if (trimmed === '') return { ok: false, error: { key: 'emptyInput' } };
+  const intervals: Array<[number, number]> = [];
+  for (const token of trimmed.split(',')) {
+    const t = token.trim();
+    const m = t.match(/^(\d+)\s*-\s*(\d+)$/);
+    if (!m) return { ok: false, error: { key: 'invalidArray' } };
+    const a = Number(m[1]);
+    const b = Number(m[2]);
+    if (!Number.isSafeInteger(a) || !Number.isSafeInteger(b) || a >= b) {
+      return { ok: false, error: { key: 'invalidArray' } };
+    }
+    intervals.push([a, b]);
+  }
+  if (spec.maxLen !== undefined && intervals.length > spec.maxLen) {
+    return { ok: false, error: { key: 'tooManyItems', params: { max: spec.maxLen } } };
+  }
+  return { ok: true, value: intervals };
+}
+
+export type AnyInputValue =
+  | number[]
+  | (number | null)[]
+  | EdgePair[]
+  | { text: string; pattern: string }
+  | Array<[number, number]>;
 
 /** 按 inputSpec.kind 分派解析 */
 export function parseInputByKind(raw: string, spec: InputFieldSpec): ParseResult<AnyInputValue> {
@@ -126,6 +169,10 @@ export function parseInputByKind(raw: string, spec: InputFieldSpec): ParseResult
       return parseTreeArray(raw, spec);
     case 'edge-list':
       return parseEdgeList(raw, spec);
+    case 'string-pair':
+      return parseStringPair(raw);
+    case 'interval-list':
+      return parseIntervalList(raw, spec);
     case 'int-array':
     default:
       return parseIntArray(raw, spec);

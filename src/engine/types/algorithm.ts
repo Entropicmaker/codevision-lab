@@ -13,7 +13,9 @@ export type CategoryId =
   | 'linked-list'
   | 'tree'
   | 'graph'
-  | 'dp';
+  | 'dp'
+  | 'backtracking'
+  | 'greedy';
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
@@ -39,7 +41,7 @@ export interface Mistake {
 /** 输入字段规格：驱动校验器与随机生成器 */
 export interface InputFieldSpec {
   name: string;
-  kind: 'int-array' | 'tree-array' | 'edge-list' | 'string' | 'int-matrix';
+  kind: 'int-array' | 'tree-array' | 'edge-list' | 'string-pair' | 'interval-list' | 'string' | 'int-matrix';
   minLen?: number;
   maxLen?: number;
   valueMin?: number;
