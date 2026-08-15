@@ -19,7 +19,7 @@
   C++/C# 为诚实标注的演示模式（浏览器内不伪装编译）。
 - **本地进度**：学习进度、收藏、主题、语言、播放速度等偏好保存在 localStorage，刷新不丢失。
 - **响应式**：桌面三栏 → 平板折叠 → 手机标签页（说明/代码/动画/状态）。
-- **国际化**：默认简体中文，界面文案支持一键切换英文（内容双语存储）。
+- **国际化**：默认简体中文，界面文案和算法说明支持中英文；课程标题、题目与错误说明已双语，课程长正文仍在分批翻译。
 - **键盘快捷键**：`Space` 播放/暂停 · `←/→` 上/下一步 · `R` 重置 · `Home/End` 跳首/尾 · `S` 随机数据 · `[`/`]` 减速/加速 · `?` 帮助。
 
 ## 🚀 快速开始
@@ -74,7 +74,20 @@ src/
 └── i18n/          # zh-CN / en-US 类型安全词典
 ```
 
-核心设计原则见 `docs/DESIGN.md`；新增算法的完整契约见 `docs/ALGORITHM_CONTRIBUTING.md`。
+### 工程文档
+
+| 文档 | 用途 |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | 所有编码代理必须先读的仓库级规则 |
+| [`docs/DEEPSEEK_HANDOFF.md`](docs/DEEPSEEK_HANDOFF.md) | DeepSeek Harness / V4P 启动、接手与中断恢复 |
+| [`docs/ENGINEERING_WORKFLOW.md`](docs/ENGINEERING_WORKFLOW.md) | 计划、实施、Git、部署与故障处理流程 |
+| [`docs/CONTENT_AUTHORING.md`](docs/CONTENT_AUTHORING.md) | 课程、算法、练习的编写与事实审核规范 |
+| [`docs/ALGORITHM_CONTRIBUTING.md`](docs/ALGORITHM_CONTRIBUTING.md) | 新增可视化算法的完整技术契约 |
+| [`docs/QUALITY_CHECKLIST.md`](docs/QUALITY_CHECKLIST.md) | 自动化、跨端、可访问性与生产验收清单 |
+| [`docs/ROADMAP.md`](docs/ROADMAP.md) | 当前真实基线与后续内容优先级 |
+
+任务计划和会话交接可直接复制 `docs/templates/` 中的模板。`docs/DESIGN.md` 与
+`docs/REDESIGN_PLAN.md` 保存历史设计决策，不作为当前版本事实来源。
 
 ### 关键机制
 
@@ -94,8 +107,9 @@ src/
 
 - **单元测试**（Vitest）：Runner 确定性 / 快照独立性 / 播放控制器状态机 / 输入校验 / CodeMap /
   内容注册表不变量（所有算法自动校验三语言行映射一致、协议合法）。
-- **端到端**（Playwright，desktop-chromium + mobile-chromium）：冒泡排序全链路
-  （改输入/前进后退/跳首尾/重置/语言切换/播放暂停/快捷键/进度持久化/主题恢复/分享链接）与移动端标签页。
+- **端到端**（Playwright，桌面 + 手机 + 1024px 平板）：算法全链路
+  （改输入/前进后退/跳首尾/重置/语言切换/播放暂停/快捷键/进度持久化/主题恢复/分享链接）、
+  路线图、移动端布局与生产环境 Python 冒烟测试。
 
 ## 📦 技术栈
 

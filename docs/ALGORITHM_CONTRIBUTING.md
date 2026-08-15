@@ -1,5 +1,8 @@
 # 算法贡献契约（Algorithm Contributing Contract）
 
+> 开工前先读根目录 `AGENTS.md` 与 `docs/CONTENT_AUTHORING.md`；完成后按
+> `docs/QUALITY_CHECKLIST.md` 验收。本文专注算法 schema、Runner 与代码行映射契约。
+
 本文档定义在 CodeVision Lab 中新增一个可视化算法的完整规范。所有内容必须数据驱动，
 Runner（执行逻辑）与 meta（教学内容）分离，且满足自动化测试的不变量。
 
@@ -124,8 +127,9 @@ Runner 每一步的 `codeLineId` 必须存在于全部三种语言的 lineMap。
 ## 9. 验证命令
 
 ```bash
-npx tsc -b          # 类型检查必须零错误（strict 模式）
-npm test            # 单元测试必须全绿
+npm run typecheck   # 类型检查必须零错误（strict 模式）
+npm run test        # 单元测试必须全绿
+npm run build       # 生产构建必须成功
 ```
 
 > 注意：`src/engine/types/step.ts` 的 `OperationType` 如需新操作类型，先扩展该联合类型。

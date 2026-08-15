@@ -1,5 +1,8 @@
 # CodeVision Lab 跨端视觉改造计划
 
+> **已完成的历史实施计划（2026-08）**：用于说明本轮视觉与响应式改造的目标和验收口径。
+> 后续 UI 工作以 `AGENTS.md`、`ENGINEERING_WORKFLOW.md` 与 `QUALITY_CHECKLIST.md` 为准。
+
 ## 目标
 
 - 与个人博客保持同一作者气质：米白纸色、深海墨色、苔绿、沙棕与宋体标题。
