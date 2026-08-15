@@ -9,12 +9,15 @@ import { runStackDemo } from './stackDemo';
 import { runQueueDemo } from './queueDemo';
 import { runGraphDfs } from './graphDfs';
 import { runGraphBfs } from './graphBfs';
+import { runTopologicalSort } from './topologicalSort';
 import { runLinkedListOps } from './linkedListOps';
 import { runTreeTraversal } from './treeTraversal';
 import { runFibonacci } from './fibonacci';
 import { runKnapsack } from './knapsack';
 import { runQuickSort } from './quickSort';
 import { runMergeSort } from './mergeSort';
+import { runHeapSort } from './heapSort';
+import { runHashTable } from './hashTable';
 
 /** Runner 注册表：meta.runnerId → 执行器 */
 const runners: Record<string, AlgorithmRunner> = {
@@ -28,12 +31,15 @@ const runners: Record<string, AlgorithmRunner> = {
   'queue-demo': runQueueDemo,
   'dfs': runGraphDfs,
   'bfs': runGraphBfs,
+  'topological-sort': runTopologicalSort,
   'linked-list-ops': runLinkedListOps,
   'tree-traversal': runTreeTraversal,
   'fibonacci': runFibonacci,
   'knapsack': runKnapsack,
   'quick-sort': runQuickSort,
   'merge-sort': runMergeSort,
+  'heap-sort': runHeapSort,
+  'hash-table': runHashTable,
 };
 
 export function getRunner(runnerId: string): AlgorithmRunner | undefined {

@@ -22,6 +22,9 @@ const ALGORITHM_IDS = [
   'bfs',
   'fibonacci',
   'knapsack',
+  'heap-sort',
+  'hash-table',
+  'topological-sort',
 ];
 
 test.describe('全部算法冒烟测试', () => {
