@@ -34,7 +34,7 @@ class Program
         // 常用方法
         Array.Sort(scores);                      //>sort
         int idx = Array.IndexOf(scores, 88);     // 排序后 88 的下标
-        Console.WriteLine(idx);                  // 2
+        Console.WriteLine(idx);                  // 3
 
         // 多维（矩形）数组：每一行长度相同
         int[,] grid = { { 1, 2, 3 }, { 4, 5, 6 } }; //>multi

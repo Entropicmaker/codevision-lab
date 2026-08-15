@@ -78,10 +78,9 @@ export const fibonacciMeta: AlgorithmMeta = {
   defaultInput: '',
   presets: [{ name: { zh: '默认 n=8', en: 'Default n=8' }, input: '' }],
   boundaryCases: [
-    // chips 只设置数组字段（必须为空）；实际 n 由右侧 aux 输入框决定
-    { name: { zh: 'n=0（最小项）', en: 'n=0 (minimum)' }, input: '' },
-    { name: { zh: 'n=1（边界）', en: 'n=1 (edge)' }, input: ' ' },
-    { name: { zh: 'n=2（首次递推）', en: 'n=2 (first recurrence)' }, input: '  ' },
+    { name: { zh: 'n=0（最小项）', en: 'n=0 (minimum)' }, input: '', aux: 0 },
+    { name: { zh: 'n=1（边界）', en: 'n=1 (edge)' }, input: '', aux: 1 },
+    { name: { zh: 'n=2（首次递推）', en: 'n=2 (first recurrence)' }, input: '', aux: 2 },
   ],
   runnerId: 'fibonacci',
   visualKind: 'table',

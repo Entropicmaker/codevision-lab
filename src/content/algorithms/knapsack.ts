@@ -19,8 +19,12 @@ int knapsack(vector<int>& v, int W, int n) {        //>func
         }
     }
     int j = W;                                      //>backtrack
+    vector<int> selected;                           // 记录选中的物品
     for (int i = n; i >= 1; i--) {
-        if (dp[i][j] != dp[i - 1][j]) j -= i + 1;   // 选中第 i 件物品
+        if (dp[i][j] != dp[i - 1][j]) {
+            selected.push_back(i);                  // 选中第 i 件物品
+            j -= i + 1;
+        }
     }
     return dp[n][W];                                //>end
 }`;
@@ -76,9 +80,12 @@ const pseudocode = `knapsack(v, W, n):            #>func
       else:                     #>take
         dp[i][j] = max(dp[i-1][j], dp[i-1][j-w] + v[i-1])
   j = W                         #>backtrack
+  selected = []                 # 记录选中的物品
   for i = n .. 1:
-    if dp[i][j] != dp[i-1][j]: j -= i + 1
-  return dp[n][W]               #>end`;
+    if dp[i][j] != dp[i-1][j]:
+      selected.append(i)        # 选中物品 i（重量 i，价值 v[i-1]）
+      j -= i + 1
+  return dp[n][W], selected     #>end`;
 
 export const knapsackMeta: AlgorithmMeta = {
   id: 'knapsack',
@@ -111,7 +118,7 @@ export const knapsackMeta: AlgorithmMeta = {
     { name: { zh: '六件示例', en: '6-item sample' }, input: '12, 5, 20, 8, 15, 9' },
   ],
   boundaryCases: [
-    { name: { zh: '容量 W=1', en: 'Capacity W=1' }, input: '15, 20, 30, 25' },
+    { name: { zh: '容量 W=1', en: 'Capacity W=1' }, input: '15, 20, 30, 25', aux: 1 },
     { name: { zh: '单个物品', en: 'Single item' }, input: '42' },
     { name: { zh: '价值全相等', en: 'Equal values' }, input: '7, 7, 7, 7' },
   ],

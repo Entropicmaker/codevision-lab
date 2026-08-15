@@ -22,8 +22,18 @@ ListNode* linkedListOps(const vector<int>& values, int pos) { //>func
         cout << cur->val << " ";                              //>visit
     }
     ListNode* newNode = new ListNode(99);                     //>insert
-    // 将 newNode 插入到第 pos 个位置（本演示固定插入值 99）
-    // 删除头节点之后的第 1 个节点                             //>delete
+    if (pos <= 0) { newNode->next = head; head = newNode; }
+    else {
+        ListNode* prev = head;
+        for (int i = 1; i < pos && prev->next; ++i) prev = prev->next;
+        newNode->next = prev->next;
+        prev->next = newNode;
+    }
+    if (head && head->next) {                                 //>delete
+        ListNode* toDel = head->next;
+        head->next = toDel->next;
+        delete toDel;
+    }
     return head;
 }                                                             //>end`;
 
@@ -50,8 +60,16 @@ class LinkedListOpsDemo
             Console.Write(cur.val + " ");                      //>visit
         }
         ListNode newNode = new ListNode(99);                   //>insert
-        // 将 newNode 插入到第 pos 个位置（本演示固定插入值 99）
-        // 删除头节点之后的第 1 个节点                          //>delete
+        if (pos <= 0) { newNode.next = head; head = newNode; }
+        else {
+            ListNode prev = head;
+            for (int i = 1; i < pos && prev.next != null; i++) prev = prev.next;
+            newNode.next = prev.next;
+            prev.next = newNode;
+        }
+        if (head != null && head.next != null) {              //>delete
+            head.next = head.next.next; // GC 自动回收被摘除的节点
+        }
         return head;
     }                                                          //>end
 }`;
@@ -76,8 +94,19 @@ def linked_list_ops(values, pos):       #>func
         print(cur.val, end=" ")         #>visit
         cur = cur.next
     new_node = ListNode(99)             #>insert
-    # 将 new_node 插入到第 pos 个位置（本演示固定插入值 99）
-    # 删除头节点之后的第 1 个节点         #>delete
+    if pos <= 0:
+        new_node.next = head
+        head = new_node
+    else:
+        prev = head
+        for _ in range(1, pos):
+            if prev.next is None:
+                break
+            prev = prev.next
+        new_node.next = prev.next
+        prev.next = new_node
+    if head is not None and head.next is not None:  #>delete
+        head.next = head.next.next
     return head                         #>end`;
 
 const pseudocode = `linkedListOps(values, pos):      #>func
@@ -105,7 +134,8 @@ export const linkedListOpsMeta: AlgorithmMeta = {
     en: 'A linked list chains nodes (data + next pointer) one after another. This demo performs four basic operations in order: build the list by appending each array value at the tail, traverse from head and print the visit sequence, insert a new node (value fixed at 99, position given by aux) at a given position, and delete the 1st node after the head. Insert and delete require careful pointer maintenance: forgetting to update the tail makes building degrade to O(n²), and losing a reference while deleting breaks the chain or leaks memory.',
   },
   complexity: {
-    time: { best: 'O(1)', average: 'O(n)', worst: 'O(n)' },
+    // 口径：构建/遍历/按位置插入 O(n)；删头后节点 O(1)（best 即该项）
+    time: { best: 'O(1)（删头后节点）', average: 'O(n)', worst: 'O(n)' },
     space: 'O(n)',
   },
   prerequisites: [],

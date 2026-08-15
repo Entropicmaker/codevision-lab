@@ -146,7 +146,7 @@ export const dijkstraMeta: AlgorithmMeta = {
     {
       title: { zh: '负权边导致结果错误', en: 'Negative edge weights break the result' },
       detail: {
-        zh: 'Dijkstra 依赖"已确定节点的距离不会再变小"这一性质，它只在边权非负时成立。一旦存在负权边（例如 0→1:2、0→2:4、1→2:-3），已确定节点的距离之后仍可能被继续缩短，贪心策略会给出错误答案。含负权边的最短路应改用 Bellman-Ford（或检测负环的 SPFA）。',
+        zh: 'Dijkstra 依赖"已确定节点的距离不会再变小"这一性质，它只在边权非负时成立。存在负权边时可能出错：例如 0→1:2、0→2:3、2→1:-2，算法先确定 1（dist=2），随后才经 2 发现 0→2→1=1 更短，但 1 已固化，返回错误答案 2。含负权边的最短路应改用 Bellman-Ford。',
         en: "Dijkstra relies on the property that a finalized node's distance never shrinks, which holds only for non-negative weights. With a negative edge (e.g. 0→1:2, 0→2:4, 1→2:-3), a finalized distance can still be improved later, so the greedy choice is wrong. Use Bellman-Ford (or SPFA with negative-cycle detection) instead.",
       },
     },

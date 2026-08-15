@@ -14,6 +14,7 @@ void hashTableDemo(const vector<int>& keys, int m) {   //>func
             if (x == key) { exists = true; break; }
         if (!exists) bucket[h].push_back(key);         //>chain
     }
+    if (keys.empty()) return;   // 空输入直接结束
     int target = keys.back();
     int h2 = target % m;
     for (int x : bucket[h2])
@@ -37,6 +38,7 @@ class HashTableDemo
                 if (x == key) { exists = true; break; }
             if (!exists) bucket[h].Add(key);            //>chain
         }
+        if (keys.Length == 0) return;   // 空输入直接结束
         int target = keys[keys.Length - 1];
         int h2 = target % m;
         foreach (int x in bucket[h2])
@@ -53,6 +55,8 @@ def hash_table_demo(keys, m):           #>func
         exists = any(x == key for x in bucket[h])   #>check
         if not exists:
             bucket[h].append(key)       #>chain
+    if not keys:               # 空输入直接结束
+        return
     target = keys[-1]
     h = target % m
     for x in bucket[h]:

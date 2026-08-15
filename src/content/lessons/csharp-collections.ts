@@ -90,7 +90,7 @@ export const csharpCollectionsLesson: LessonMeta = {
     {
       title: { zh: 'List 遍历时删除元素会跳过相邻项', en: 'Removing while iterating a List skips elements' },
       detail: {
-        zh: '正序 foreach 时删除元素会改变后续下标，导致漏删相邻项。应倒序遍历，或改用 RemoveAll / 收集待删项后再删。',
+        zh: '遍历时删除元素会改变后续下标，导致漏删相邻项（foreach 遍历中直接 Remove 还会抛 InvalidOperationException）。应倒序 for 遍历，或改用 RemoveAll / 收集待删项后再删。',
         en: 'Removing during a forward foreach shifts subsequent indices and skips adjacent items. Iterate backward, use RemoveAll, or collect items to delete first.',
       },
       code: `var list = new List<int> { 1, 2, 3, 4 };

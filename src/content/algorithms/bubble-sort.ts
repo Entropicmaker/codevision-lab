@@ -97,7 +97,7 @@ export const bubbleSortMeta: AlgorithmMeta = {
     {
       title: { zh: '内层边界写成 j < n-1', en: 'Writing the inner bound as j < n-1' },
       detail: {
-        zh: '若内层循环用 j < n-1 而不是 j < n-1-i，会把已排好的后缀再次比较，甚至访问越界。外层每完成一轮，末尾就多一个已就位元素，内层上界必须随之收缩。',
+        zh: '若内层循环用 j < n-1 而不是 j < n-1-i，会把已就位的后缀再次比较，浪费大量比较次数（不越界，只是多做无用功）。外层每完成一轮，末尾就多一个已就位元素，内层上界必须随之收缩。',
         en: 'Using j < n-1 instead of j < n-1-i re-compares the sorted suffix. Each finished pass fixes one more element at the end, so the inner bound must shrink accordingly.',
       },
       code: 'for (int j = 0; j < n - 1 - i; ++j)  // 正确\n// for (int j = 0; j < n - 1; ++j) // 错误：重复比较已排序后缀',

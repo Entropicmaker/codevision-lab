@@ -61,7 +61,7 @@ export const stackDemoMeta: AlgorithmMeta = {
     en: 'A stack is a LIFO (Last In, First Out) linear data structure: insertion (push) and deletion (pop) happen only at the top. This demo pushes the input sequence onto the stack one by one and then pops them all, showing the LIFO access order; both operations are O(1).',
   },
   complexity: {
-    time: { best: 'O(1)', average: 'O(1)', worst: 'O(1)' },
+    time: { best: 'O(1) 单次 · O(n) 整体', average: 'O(1) 单次 · O(n) 整体', worst: 'O(1) 单次 · O(n) 整体' },
     space: 'O(n)',
   },
   prerequisites: [],

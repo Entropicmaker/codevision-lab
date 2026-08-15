@@ -107,8 +107,8 @@ export const slidingWindowMeta: AlgorithmMeta = {
   ],
   boundaryCases: [
     { name: { zh: '空数组', en: 'Empty array' }, input: '' },
-    { name: { zh: 'k=n（窗口覆盖全数组）', en: 'k = n (window covers the array)' }, input: '1, 2, 3' },
-    { name: { zh: 'k=1（每个元素单独成窗）', en: 'k = 1 (single-element windows)' }, input: '3, 1, 4, 1, 5' },
+    { name: { zh: 'k=n（窗口覆盖全数组）', en: 'k = n (window covers the array)' }, input: '1, 2, 3', aux: 3 },
+    { name: { zh: 'k=1（每个元素单独成窗）', en: 'k = 1 (single-element windows)' }, input: '3, 1, 4, 1, 5', aux: 1 },
     { name: { zh: 'k 大于数组长度', en: 'k larger than the array' }, input: '1, 2' },
   ],
   runnerId: 'sliding-window',

@@ -58,6 +58,8 @@ export interface InputFieldSpec {
 export interface BoundaryCase {
   name: LocalizedText;
   input: string;
+  /** 可选：覆盖默认 aux 参数（如二分搜索的目标值、滑动窗口的 k、背包容量 W） */
+  aux?: number;
 }
 
 /** 算法元数据（内容层，与执行逻辑分离） */

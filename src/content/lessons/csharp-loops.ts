@@ -29,7 +29,7 @@ class Program
         else
             Console.WriteLine("C");
 
-        // switch 表达式（C# 8+）
+        // switch 表达式（C# 8+；关系模式 >= 需 C# 9）
         string grade = score switch         //>switch
         {
             >= 90 => "A",
@@ -80,7 +80,7 @@ export const csharpLoopsLesson: LessonMeta = {
   prerequisites: ['csharp-operators'],
   concept: [
     '条件语句让程序根据状态选择执行路径：if 判断一个 bool 条件，else if 补充多个分支，else 兜底。C# 要求条件必须是 bool 类型，不能像 C++ 那样把非零整数当"真"。',
-    'switch 适合对同一个值做多分支判断；C# 8 引入 switch 表达式，把"选择"写成"求值表达式"，更简洁。C# 的 switch 禁止贯穿（fall-through），每个 case 必须以 break/return 结束，从源头避免了忘记 break 引发的连锁 bug。',
+    'switch 适合对同一个值做多分支判断；C# 8 引入 switch 表达式，把"选择"写成"求值表达式"，更简洁（关系模式如 >= 90 需 C# 9）。C# 的 switch 禁止贯穿（fall-through），每个 case 必须以 break/return 结束，从源头避免了忘记 break 引发的连锁 bug。',
     '循环让代码重复执行：for 适合已知次数，while 适合先判断后执行，do-while 至少执行一次，foreach 专门遍历集合。break 提前退出整个循环，continue 跳过本轮、进入下一次。',
     '循环最容易翻车的两处：死循环（while 忘记更新循环变量）和边界差一（off-by-one，i < n 还是 i <= n）。写完循环，先在脑子里把第一轮和最后一轮各跑一遍。',
   ],

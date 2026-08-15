@@ -84,7 +84,7 @@ export const quickSortMeta: AlgorithmMeta = {
   },
   complexity: {
     time: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n²)' },
-    space: 'O(log n)',
+    space: 'O(log n) 平均 · O(n) 最坏',
   },
   prerequisites: ['merge-sort'],
   tags: ['排序', '分治', '递归', '原地'],

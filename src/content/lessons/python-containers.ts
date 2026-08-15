@@ -46,7 +46,7 @@ print(lst[-1])            # 4 —— 负索引从尾部取
 d = {"apple": 5, "banana": 3}   # 字典：键值对
 d["cherry"] = 7                 # 添加 / 覆盖
 print(d["apple"])               # 5
-print(len(lst), len(d))         # 4 3`;
+print(len(lst), len(d))         # 5 3`;
 
 export const pythonContainersLesson: LessonMeta = {
   id: 'python-containers',

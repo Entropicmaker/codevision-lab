@@ -35,7 +35,7 @@ class Program
 
         // 多播：+= 组合多个方法
         op += Add;
-        Console.WriteLine(op(3, 4)); // 3（返回最后一个方法的返回值）
+        Console.WriteLine(op(3, 4)); // 7（返回最后一个方法 Add 的返回值）
     }
 }`;
 
@@ -106,9 +106,26 @@ export const csharpDelegatesLesson: LessonMeta = {
     },
     hints: ['switch 语句选择委托实例', '注意除零检查'],
     answer: `delegate double Op(double a, double b);
+
+static double Add(double a, double b) => a + b;
+static double Sub(double a, double b) => a - b;
+static double Mul(double a, double b) => a * b;
 static double Div(double a, double b) => a / b;
 
-Op op = Div;
-Console.WriteLine(op(10, 2)); // 5`,
+// 根据操作符选择委托实例
+Op op = null;
+string choice = "*";
+switch (choice)
+{
+    case "+": op = Add; break;
+    case "-": op = Sub; break;
+    case "*": op = Mul; break;
+    case "/": op = Div; break;
+}
+double a = 10, b = 2;
+double result = op != null && (choice != "/" || b != 0)
+    ? op(a, b)
+    : double.NaN;          // 除零或未知操作符时返回 NaN
+Console.WriteLine(result); // 20`,
   },
 };

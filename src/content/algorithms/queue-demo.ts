@@ -63,7 +63,7 @@ export const queueDemoMeta: AlgorithmMeta = {
     en: 'A queue is a FIFO (First In, First Out) linear data structure: new elements are enqueued at the rear and dequeued from the front. Queues are often implemented with a fixed-capacity circular array, reusing space via front/rear indices and modulo arithmetic. This demo enqueues the input sequence and then dequeues it all, showing the FIFO order; both operations are O(1).',
   },
   complexity: {
-    time: { best: 'O(1)', average: 'O(1)', worst: 'O(1)' },
+    time: { best: 'O(1) 单次 · O(n) 整体', average: 'O(1) 单次 · O(n) 整体', worst: 'O(1) 单次 · O(n) 整体' },
     space: 'O(n)',
   },
   prerequisites: [],

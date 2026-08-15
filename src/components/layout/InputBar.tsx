@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { AlgorithmMeta } from '../../engine/types/algorithm';
+import type { AlgorithmMeta, BoundaryCase } from '../../engine/types/algorithm';
 import type { InputError } from '../../engine/inputs/parsers';
 import { randomInputForSpec, randomIntArray, arrayToInput } from '../../engine/inputs/generators';
 import { buildShareUrl } from '../../lib/url-share';
@@ -27,7 +27,7 @@ export function InputBar({
   meta: AlgorithmMeta;
   rawInput: string;
   onRawChange: (value: string) => void;
-  onApply: (raw: string) => void;
+  onApply: (raw: string, auxOverride?: string) => void;
   error: InputError | null;
   auxRaw: string;
   onAuxChange: (value: string) => void;
@@ -83,9 +83,11 @@ export function InputBar({
     onApply(text);
   };
 
-  const applyCase = (input: string): void => {
-    onRawChange(input);
-    onApply(input);
+  /** 应用预设/边界案例：可携带 aux 覆盖（如目标值、窗口大小、容量） */
+  const applyCase = (bc: BoundaryCase): void => {
+    onRawChange(bc.input);
+    if (bc.aux !== undefined) onAuxChange(String(bc.aux));
+    onApply(bc.input, bc.aux !== undefined ? String(bc.aux) : undefined);
   };
 
   const share = async (): Promise<void> => {
@@ -187,7 +189,7 @@ export function InputBar({
           <button
             key={preset.input}
             type="button"
-            onClick={() => applyCase(preset.input)}
+            onClick={() => applyCase(preset)}
             className="rounded-md border border-border bg-surface px-2 py-0.5 text-muted transition hover:border-borderstrong hover:text-text"
           >
             {preset.name[locale]}
@@ -198,7 +200,7 @@ export function InputBar({
           <button
             key={bc.input}
             type="button"
-            onClick={() => applyCase(bc.input)}
+            onClick={() => applyCase(bc)}
             className="rounded-md border border-border bg-surface px-2 py-0.5 text-muted transition hover:border-borderstrong hover:text-text"
           >
             {bc.name[locale]}

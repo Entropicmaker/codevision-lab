@@ -93,13 +93,13 @@ export const binarySearchMeta: AlgorithmMeta = {
   },
   defaultInput: '2, 5, 8, 12, 16, 23, 38, 45, 56, 72',
   presets: [
-    { name: { zh: '标准有序数组', en: 'Standard sorted array' }, input: '1, 4, 7, 10, 15, 20, 33' },
+    { name: { zh: '标准有序数组', en: 'Standard sorted array' }, input: '1, 4, 7, 10, 15, 20, 23, 33' },
   ],
   boundaryCases: [
     { name: { zh: '空数组', en: 'Empty array' }, input: '' },
-    { name: { zh: '单元素命中', en: 'Single hit' }, input: '7' },
-    { name: { zh: '目标不存在', en: 'Target missing' }, input: '2, 5, 8, 12, 16, 23, 38' },
-    { name: { zh: '目标在左边界', en: 'Target at left edge' }, input: '2, 5, 8, 12, 16, 23, 38' },
+    { name: { zh: '单元素命中', en: 'Single hit' }, input: '7', aux: 7 },
+    { name: { zh: '目标不存在', en: 'Target missing' }, input: '2, 5, 8, 12, 16, 38', aux: 77 },
+    { name: { zh: '目标在左边界', en: 'Target at left edge' }, input: '2, 5, 8, 12, 16, 23, 38', aux: 2 },
   ],
   runnerId: 'binary-search',
   visualKind: 'array-blocks',

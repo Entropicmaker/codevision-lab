@@ -102,7 +102,7 @@ export const cppIoLesson: LessonMeta = {
         zh: 'endl 每次都刷新缓冲区（触发系统调用），循环里高频输出会变慢。只想要换行时用 \'\\n\'。',
         en: 'endl flushes the buffer every time, triggering syscalls that slow down high-frequency output. Use \'\\n\' when you only need a newline.',
       },
-      code: 'for (int i = 0; i < 1e6; i++)\n    cout << i << endl;   // 每次刷新，慢\n    cout << i << "\\n";  // 只换行，快',
+      code: '// 慢：endl 每次都刷新缓冲区\nfor (int i = 0; i < 1e6; i++)\n    cout << i << endl;\n// 快：\'\\n\' 不刷新，由缓冲区批量输出\nfor (int i = 0; i < 1e6; i++)\n    cout << i << \'\\n\';',
     },
   ],
   exercise: {

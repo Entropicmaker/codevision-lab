@@ -7,7 +7,7 @@ const cppSource = `#include <vector>
 #include <iostream>
 using namespace std;
 
-// 并查集：find 带路径压缩，union 按根合并
+// 并查集（教学简化版）：find 沿 parent 上溯，union 直接挂接
 int findRoot(vector<int>& parent, int x) { //>find
     if (parent[x] != x) parent[x] = findRoot(parent, parent[x]);
     return parent[x];
@@ -39,7 +39,7 @@ using System.Linq;
 
 class KruskalDemo
 {
-    // 并查集：find 带路径压缩，union 按根合并
+    // 并查集（教学简化版）：find 沿 parent 上溯，union 直接挂接
     static int FindRoot(int[] parent, int x) { //>find
         if (parent[x] != x) parent[x] = FindRoot(parent, parent[x]);
         return parent[x];
@@ -66,7 +66,7 @@ class KruskalDemo
     }
 }`;
 
-const pythonSource = `# 并查集：find 带路径压缩，union 按根合并
+const pythonSource = `# 并查集（教学简化版）：find 沿 parent 上溯，union 直接挂接
 def find_root(parent, x):                #>find
     if parent[x] != x:
         parent[x] = find_root(parent, parent[x])
@@ -116,7 +116,7 @@ export const kruskalMeta: AlgorithmMeta = {
   category: 'graph',
   difficulty: 'medium',
   description: {
-    zh: 'Kruskal 算法求无向加权连通图的最小生成树（MST）。它先把所有边按权重升序排序，然后从最轻的边开始逐条尝试加入：用并查集（union-find）判断边两端是否已经连通——若属于不同集合，则选中这条边并合并两端集合；若属于同一集合，加入它会形成环，故跳过。重复直到选中 n-1 条边为止。复杂度由排序主导，为 O(E log E)；带路径压缩与按秩合并的并查集单次操作接近 O(1)。与 Prim 一样，Kruskal 也是贪心算法，但 Prim 从顶点扩张，Kruskal 按边贪心。',
+    zh: 'Kruskal 算法求无向加权连通图的最小生成树（MST）。它先把所有边按权重升序排序，然后从最轻的边开始逐条尝试加入：用并查集（union-find）判断边两端是否已经连通——若属于不同集合，则选中这条边并合并两端集合；若属于同一集合，加入它会形成环，故跳过。重复直到选中 n-1 条边为止。复杂度由排序主导，为 O(E log E)。本演示采用教学简化版并查集（find 仅沿 parent 上溯、union 直接挂接根，未做路径压缩与按秩合并），单次 find 最坏 O(V)；实际工程中加上路径压缩与按秩合并后均摊接近 O(1)。与 Prim 一样，Kruskal 也是贪心算法，但 Prim 从顶点扩张，Kruskal 按边贪心。',
     en: "Kruskal's algorithm computes the minimum spanning tree (MST) of an undirected weighted connected graph. It first sorts all edges by weight ascending, then tries each edge from lightest to heaviest, using a union-find structure to test whether the two endpoints are already connected: if they are in different sets, the edge is selected and the two sets are merged; if they are in the same set, adding it would create a cycle, so it is skipped. This repeats until n-1 edges are selected. Complexity is dominated by sorting, O(E log E); each union-find operation is near O(1) with path compression and union by rank. Like Prim, Kruskal is greedy, but it works edge-by-edge instead of expanding a vertex frontier.",
   },
   complexity: {

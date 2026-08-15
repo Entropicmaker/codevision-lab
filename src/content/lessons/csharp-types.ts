@@ -44,7 +44,7 @@ class Program
 const pythonSource = `lst = [1, 2, 3]    # 列表：可变对象
 lst2 = lst          # 共享同一对象
 lst2[0] = 99
-print(lst)          # [99, 1, 2, 3]
+print(lst)          # [99, 2, 3]
 
 num = 42            # 整数：不可变
 num2 = num

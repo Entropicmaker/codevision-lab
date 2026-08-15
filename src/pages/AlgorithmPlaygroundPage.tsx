@@ -97,7 +97,7 @@ export function AlgorithmPlaygroundPage() {
   const [mobileTab, setMobileTab] = useState('viz');
 
   const applyInput = useCallback(
-    (raw: string) => {
+    (raw: string, auxOverride?: string) => {
       const m = algorithmId ? getAlgorithmMeta(algorithmId) : undefined;
       if (!m) return;
       const result = parseInputByKind(raw, m.inputSpec);
@@ -107,7 +107,7 @@ export function AlgorithmPlaygroundPage() {
       }
       let value: unknown = result.value;
       if (m.inputSpec.aux) {
-        const auxResult = parseAuxOrDefault(auxRaw, m.inputSpec.aux);
+        const auxResult = parseAuxOrDefault(auxOverride ?? auxRaw, m.inputSpec.aux);
         if (!auxResult.ok) {
           setInputError(auxResult.error);
           return;
@@ -116,7 +116,7 @@ export function AlgorithmPlaygroundPage() {
       }
       setApplied(value);
       setInputError(null);
-      writeInputToUrl(raw, m.inputSpec.aux ? auxRaw : undefined);
+      writeInputToUrl(raw, m.inputSpec.aux ? (auxOverride ?? auxRaw) : undefined);
     },
     [algorithmId, auxRaw],
   );

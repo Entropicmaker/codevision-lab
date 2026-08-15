@@ -94,7 +94,7 @@ export const twoPointersMeta: AlgorithmMeta = {
   defaultInput: '1, 3, 4, 6, 8, 10, 12, 15',
   presets: [
     { name: { zh: '目标在两端', en: 'Target at both ends' }, input: '1, 4, 6, 10' },
-    { name: { zh: '目标在中间', en: 'Target in the middle' }, input: '2, 5, 8, 12, 16, 20' },
+    { name: { zh: '目标在中间', en: 'Target in the middle' }, input: '2, 4, 5, 6, 9, 20', aux: 11 },
   ],
   boundaryCases: [
     { name: { zh: '空数组', en: 'Empty array' }, input: '' },
