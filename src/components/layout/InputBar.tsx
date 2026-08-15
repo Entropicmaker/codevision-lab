@@ -187,7 +187,7 @@ export function InputBar({
         <span className="text-muted">{t.playground.presetCases}:</span>
         {meta.presets.map((preset) => (
           <button
-            key={preset.input}
+            key={`preset-${preset.input}-${preset.aux ?? ''}-${preset.name.zh}`}
             type="button"
             onClick={() => applyCase(preset)}
             className="rounded-md border border-border bg-surface px-2 py-0.5 text-muted transition hover:border-borderstrong hover:text-text"
@@ -198,7 +198,7 @@ export function InputBar({
         <span className="ml-2 text-muted">{t.playground.boundaryCases}:</span>
         {meta.boundaryCases.map((bc) => (
           <button
-            key={bc.input}
+            key={`boundary-${bc.input}-${bc.aux ?? ''}-${bc.name.zh}`}
             type="button"
             onClick={() => applyCase(bc)}
             className="rounded-md border border-border bg-surface px-2 py-0.5 text-muted transition hover:border-borderstrong hover:text-text"
