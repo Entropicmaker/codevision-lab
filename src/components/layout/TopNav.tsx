@@ -4,6 +4,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { useSettings } from '../../stores/settingsStore';
 import { cn } from '../../lib/cn';
 import { IconGlobe, IconMenu, IconMoon, IconSun, IconClose } from '../ui/Icons';
+import { MobileSiteSwitcher, SiteSwitcher } from './SiteSwitcher';
 
 const NAV_ITEMS = [
   { to: '/', key: 'home' },
@@ -101,6 +102,7 @@ export function TopNav() {
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
+          <SiteSwitcher />
           <button
             type="button"
             onClick={() => setUiLang(uiLang === 'zh' ? 'en' : 'zh')}
@@ -178,6 +180,7 @@ export function TopNav() {
                 </NavLink>
               ))}
             </nav>
+            <MobileSiteSwitcher />
           </div>
         </div>
       )}

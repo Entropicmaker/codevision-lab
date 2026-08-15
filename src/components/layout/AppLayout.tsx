@@ -2,9 +2,10 @@ import type { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 import { TopNav } from './TopNav';
 import { useI18n } from '../../hooks/useI18n';
+import { lingeoSites } from '../../data/ecosystem';
 
 export function AppLayout(): ReactNode {
-  const { t } = useI18n();
+  const { t, locale, localize } = useI18n();
   return (
     <div className="app-frame flex min-h-screen flex-col text-text">
       <a
@@ -24,9 +25,30 @@ export function AppLayout(): ReactNode {
             <p className="mt-1 leading-relaxed">{t.footer.note}</p>
           </div>
           <nav className="flex flex-wrap gap-x-4 gap-y-2" aria-label={t.footer.links}>
-            <a href="https://lingeocs.com/" className="hover:text-text hover:underline">{t.footer.blog}</a>
-            <a href="https://github.com/Entropicmaker/codevision-lab" className="hover:text-text hover:underline">GitHub</a>
-            <a href="https://github.com/Entropicmaker/codevision-lab#readme" className="hover:text-text hover:underline">README</a>
+            {lingeoSites
+              .filter((site) => site.id !== 'codevision')
+              .map((site) => (
+                <a key={site.id} href={site.href} className="hover:text-text hover:underline">
+                  {site.primary
+                    ? locale === 'zh'
+                      ? 'LingeoCS 主站'
+                      : 'LingeoCS home'
+                    : localize(site.name)}{' '}
+                  ↗
+                </a>
+              ))}
+            <a
+              href="https://github.com/Entropicmaker/codevision-lab"
+              className="hover:text-text hover:underline"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/Entropicmaker/codevision-lab#readme"
+              className="hover:text-text hover:underline"
+            >
+              README
+            </a>
           </nav>
         </div>
       </footer>

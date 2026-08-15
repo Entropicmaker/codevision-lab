@@ -82,6 +82,7 @@ npm run test:all     # 单元 + E2E
 - 粗指针设备交互目标至少 44px；键盘操作必须有可见焦点。
 - 深色、浅色、中英文、减少动态效果都不能退化；弹窗/抽屉要管理焦点并恢复焦点。
 - Monaco、Pyodide 等重资源继续按页面或交互懒加载。
+- 博客是 LingeoCS 主站，CodeVision Lab 是系列子站；顶部、移动菜单和页脚的站群导航契约见 `docs/LINGEOCS_NETWORK.md`，不得把两者改成无层级的平级品牌。
 
 ### 安全与数据
 

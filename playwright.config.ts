@@ -17,7 +17,7 @@ export default defineConfig({
     { name: 'mobile-chromium', use: { ...devices['Pixel 7'] } },
     {
       name: 'tablet-chromium',
-      testMatch: /mobile-smoke\.spec\.ts/,
+      testMatch: /(?:mobile-smoke|network-navigation)\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1024, height: 1366 },
