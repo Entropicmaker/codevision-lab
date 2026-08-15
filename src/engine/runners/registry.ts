@@ -10,6 +10,7 @@ import { runQueueDemo } from './queueDemo';
 import { runGraphDfs } from './graphDfs';
 import { runGraphBfs } from './graphBfs';
 import { runTopologicalSort } from './topologicalSort';
+import { runDijkstra } from './dijkstra';
 import { runLinkedListOps } from './linkedListOps';
 import { runTreeTraversal } from './treeTraversal';
 import { runFibonacci } from './fibonacci';
@@ -18,6 +19,8 @@ import { runQuickSort } from './quickSort';
 import { runMergeSort } from './mergeSort';
 import { runHeapSort } from './heapSort';
 import { runHashTable } from './hashTable';
+import { runBellmanFord } from './bellmanFord';
+import { runFloydWarshall } from './floydWarshall';
 
 /** Runner 注册表：meta.runnerId → 执行器 */
 const runners: Record<string, AlgorithmRunner> = {
@@ -32,6 +35,7 @@ const runners: Record<string, AlgorithmRunner> = {
   'dfs': runGraphDfs,
   'bfs': runGraphBfs,
   'topological-sort': runTopologicalSort,
+  'dijkstra': runDijkstra,
   'linked-list-ops': runLinkedListOps,
   'tree-traversal': runTreeTraversal,
   'fibonacci': runFibonacci,
@@ -40,6 +44,8 @@ const runners: Record<string, AlgorithmRunner> = {
   'merge-sort': runMergeSort,
   'heap-sort': runHeapSort,
   'hash-table': runHashTable,
+  'bellman-ford': runBellmanFord,
+  'floyd-warshall': runFloydWarshall,
 };
 
 export function getRunner(runnerId: string): AlgorithmRunner | undefined {

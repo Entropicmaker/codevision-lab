@@ -26,7 +26,7 @@ export function parseIntAux(
   return { ok: true, value: num };
 }
 
-export type EdgePair = [number, number, directed?: boolean];
+export type EdgePair = [number, number, directed?: boolean, weight?: number];
 
 /** 层序树数组：数字或 null（空节点），如 1, 2, 3, null, 4, 5 */
 export function parseTreeArray(raw: string, spec: InputFieldSpec): ParseResult<(number | null)[]> {
@@ -61,7 +61,11 @@ export function parseTreeArray(raw: string, spec: InputFieldSpec): ParseResult<(
   return { ok: true, value: values };
 }
 
-/** 边列表：无向 0-1 → [0,1]；有向 0->1 → [0,1,true]；校验节点编号从 0 连续编号、无自环 */
+/**
+ * 边列表：无向 `a-b` → [a,b]；有向 `a->b` → [a,b,true]；
+ * 加权 `a-b:5` / `a->b:-3` → 追加权重（默认 1，可为负）。
+ * 校验节点编号从 0 连续编号、无自环。
+ */
 export function parseEdgeList(raw: string, spec: InputFieldSpec): ParseResult<EdgePair[]> {
   const trimmed = raw.trim();
   if (trimmed === '') {
@@ -71,19 +75,29 @@ export function parseEdgeList(raw: string, spec: InputFieldSpec): ParseResult<Ed
   const tokens = trimmed.split(',');
   for (const token of tokens) {
     const t = token.trim();
-    // 有向边 a->b 优先匹配；无向边 a-b 保持原有行为
-    const directedMatch = t.match(/^(\d+)\s*->\s*(\d+)$/);
-    const undirectedMatch = t.match(/^(\d+)\s*-\s*(\d+)$/);
+    // 有向边优先匹配；支持 :weight 后缀（可为负）
+    const directedMatch = t.match(/^(\d+)\s*->\s*(\d+)(?::(-?\d+))?$/);
+    const undirectedMatch = t.match(/^(\d+)\s*-\s*(\d+)(?::(-?\d+))?$/);
     const match = directedMatch ?? undirectedMatch;
     if (!match) {
       return { ok: false, error: { key: 'invalidArray' } };
     }
     const from = Number(match[1]);
     const to = Number(match[2]);
-    if (!Number.isSafeInteger(from) || !Number.isSafeInteger(to) || from === to) {
+    const weight = match[3] !== undefined ? Number(match[3]) : 1;
+    if (
+      !Number.isSafeInteger(from) ||
+      !Number.isSafeInteger(to) ||
+      !Number.isSafeInteger(weight) ||
+      from === to
+    ) {
       return { ok: false, error: { key: 'invalidArray' } };
     }
-    edges.push(directedMatch ? [from, to, true] : [from, to]);
+    if (directedMatch) {
+      edges.push([from, to, true, weight]);
+    } else {
+      edges.push([from, to, undefined, weight]);
+    }
   }
   // 校验节点编号连续（0..max 无空洞）
   const nodes = new Set<number>();

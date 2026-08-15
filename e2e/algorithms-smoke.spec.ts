@@ -25,6 +25,9 @@ const ALGORITHM_IDS = [
   'heap-sort',
   'hash-table',
   'topological-sort',
+  'dijkstra',
+  'bellman-ford',
+  'floyd-warshall',
 ];
 
 test.describe('全部算法冒烟测试', () => {

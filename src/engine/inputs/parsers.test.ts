@@ -67,19 +67,19 @@ describe('parseEdgeList 有向边', () => {
   it('有向边 a->b 解析为 [a, b, true]', () => {
     const r = parseEdgeList('0->1, 1->2, 2->3', EDGE_SPEC);
     expect(r.ok).toBe(true);
-    if (r.ok) expect(r.value).toEqual([[0, 1, true], [1, 2, true], [2, 3, true]]);
+    if (r.ok) expect(r.value).toEqual([[0, 1, true, 1], [1, 2, true, 1], [2, 3, true, 1]]);
   });
 
   it('混合有向与无向边：有向带 true，无向省略第三元素', () => {
     const r = parseEdgeList('0->1, 2-3', EDGE_SPEC);
     expect(r.ok).toBe(true);
-    if (r.ok) expect(r.value).toEqual([[0, 1, true], [2, 3]]);
+    if (r.ok) expect(r.value).toEqual([[0, 1, true, 1], [2, 3, undefined, 1]]);
   });
 
   it('无向边 a-b 行为不变（回归：无第三元素）', () => {
     const r = parseEdgeList('0-1, 1-2', EDGE_SPEC);
     expect(r.ok).toBe(true);
-    if (r.ok) expect(r.value).toEqual([[0, 1], [1, 2]]);
+    if (r.ok) expect(r.value).toEqual([[0, 1, undefined, 1], [1, 2, undefined, 1]]);
   });
 
   it('非法有向箭头返回 invalidArray', () => {
@@ -88,5 +88,42 @@ describe('parseEdgeList 有向边', () => {
       expect(r.ok, `input: ${bad}`).toBe(false);
       if (!r.ok) expect(r.error.key).toBe('invalidArray');
     }
+  });
+});
+
+describe('parseEdgeList 加权边扩展', () => {
+  const SPEC = { name: 'g', kind: 'edge-list' as const, maxLen: 20 };
+
+  it('无权重边默认权重 1', () => {
+    const r = parseEdgeList('0->1, 1-2', SPEC);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value).toEqual([
+        [0, 1, true, 1],
+        [1, 2, undefined, 1],
+      ]);
+    }
+  });
+
+  it('解析加权有向边（含负权）', () => {
+    const r = parseEdgeList('0->1:4, 1->2:-3', SPEC);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value).toEqual([
+        [0, 1, true, 4],
+        [1, 2, true, -3],
+      ]);
+    }
+  });
+
+  it('解析加权无向边', () => {
+    const r = parseEdgeList('0-1:5', SPEC);
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value).toEqual([[0, 1, undefined, 5]]);
+  });
+
+  it('非法权重格式报错', () => {
+    expect(parseEdgeList('0->1:abc', SPEC).ok).toBe(false);
+    expect(parseEdgeList('0->1:1.5', SPEC).ok).toBe(false);
   });
 });

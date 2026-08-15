@@ -10,6 +10,7 @@ import { queueDemoMeta } from './queue-demo';
 import { dfsMeta } from './dfs';
 import { bfsMeta } from './bfs';
 import { topologicalSortMeta } from './topological-sort';
+import { dijkstraMeta } from './dijkstra';
 import { fibonacciMeta } from './fibonacci';
 import { knapsackMeta } from './knapsack';
 import { linkedListOpsMeta } from './linked-list-ops';
@@ -18,6 +19,8 @@ import { quickSortMeta } from './quick-sort';
 import { mergeSortMeta } from './merge-sort';
 import { heapSortMeta } from './heap-sort';
 import { hashTableMeta } from './hash-table';
+import { bellmanFordMeta } from './bellman-ford';
+import { floydWarshallMeta } from './floyd-warshall';
 
 /** 全部算法元数据（内容注册表，新增算法在此登记） */
 export const algorithmMetas: AlgorithmMeta[] = [
@@ -32,6 +35,7 @@ export const algorithmMetas: AlgorithmMeta[] = [
   dfsMeta,
   bfsMeta,
   topologicalSortMeta,
+  dijkstraMeta,
   fibonacciMeta,
   knapsackMeta,
   linkedListOpsMeta,
@@ -40,6 +44,8 @@ export const algorithmMetas: AlgorithmMeta[] = [
   mergeSortMeta,
   heapSortMeta,
   hashTableMeta,
+  bellmanFordMeta,
+  floydWarshallMeta,
 ];
 
 export function getAlgorithmMeta(id: string): AlgorithmMeta | undefined {
