@@ -11,9 +11,9 @@ import {
 } from '../components/ui/Icons';
 
 const LANGUAGES = [
-  { id: 'cpp', name: 'C++', desc: '指针、引用、模板、STL', code: '01', color: 'text-sky-500' },
-  { id: 'csharp', name: 'C#', desc: '委托、事件、LINQ、异步', code: '02', color: 'text-violet-500' },
-  { id: 'python', name: 'Python', desc: '生成器、装饰器、闭包', code: '03', color: 'text-amber-500' },
+  { id: 'cpp', name: 'C++', desc: { zh: '指针、引用、模板、STL', en: 'Pointers, references, templates, STL' }, code: '01', color: 'text-sky-500' },
+  { id: 'csharp', name: 'C#', desc: { zh: '委托、事件、LINQ、异步', en: 'Delegates, events, LINQ, async' }, code: '02', color: 'text-violet-500' },
+  { id: 'python', name: 'Python', desc: { zh: '生成器、装饰器、闭包', en: 'Generators, decorators, closures' }, code: '03', color: 'text-amber-500' },
 ] as const;
 
 const FEATURES = [
@@ -35,7 +35,7 @@ export function HomePage() {
           aria-hidden
           className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-accent/10 blur-3xl"
         />
-        <div className="relative mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
+        <div className="relative mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-3 sm:mb-8 sm:pb-4">
           <span className="micro-label text-accent">Knowledge coordinates / 01</span>
           <span className="flex items-center gap-2 font-mono text-[10px] text-muted">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
@@ -43,16 +43,18 @@ export function HomePage() {
           </span>
         </div>
 
-        <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] lg:gap-12">
+        <div className="relative grid items-center gap-6 sm:gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] lg:gap-12">
           <div className="flex flex-col items-start">
-            <Badge tone="accent" className="mb-5">{home.badge}</Badge>
-            <h1 className="font-editorial max-w-3xl text-[clamp(2.55rem,7vw,5.8rem)] font-semibold leading-[1.04] tracking-[-0.055em] text-text">
-              {home.heroTitle}
+            <Badge tone="accent" className="mb-3 sm:mb-5">{home.badge}</Badge>
+            <h1 className="max-w-3xl text-[clamp(2.45rem,6.2vw,5.25rem)] font-semibold leading-[1.04] tracking-[-0.055em] text-text">
+              {locale === 'zh' ? (
+                <>看懂每一行代码，<br className="hidden sm:block" />看见每一次运算</>
+              ) : home.heroTitle}
             </h1>
-            <p className="mt-6 max-w-2xl text-sm leading-7 text-muted sm:text-base sm:leading-8">
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted sm:mt-6 sm:text-base sm:leading-8">
               {home.heroSubtitle}
             </p>
-            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <div className="mt-5 flex w-full flex-col gap-2 sm:mt-8 sm:w-auto sm:flex-row sm:gap-3">
               <Link
                 to="/algorithms/bubble-sort"
                 className="glow-accent inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-105"
@@ -70,7 +72,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="terminal-window min-w-0 p-4 sm:p-5">
+          <div className="terminal-window min-w-0 p-3 sm:p-5">
             <div className="mb-4 flex items-center gap-1.5 border-b border-border/70 pb-3" aria-hidden>
               <span className="h-2.5 w-2.5 rounded-full bg-red-500/75" />
               <span className="h-2.5 w-2.5 rounded-full bg-amber-500/75" />
@@ -78,7 +80,7 @@ export function HomePage() {
               <span className="ml-2 font-mono text-[10px] tracking-wide text-muted">bubble_sort.py · LIVE</span>
               <span className="ml-auto font-mono text-[9px] text-accent">STEP 04/08</span>
             </div>
-            <pre className="relative z-10 overflow-x-auto text-[11px] leading-6 sm:text-[12.5px]">
+            <pre className="relative z-10 max-h-[92px] overflow-hidden text-[10px] leading-5 sm:max-h-none sm:overflow-x-auto sm:text-[12.5px] sm:leading-6">
               <code>
                 <span className="text-violet-400">def</span>{' '}
                 <span className="text-sky-400 dark:text-sky-300">bubble_sort</span>
@@ -104,7 +106,7 @@ export function HomePage() {
                 <span className="rounded bg-accentsoft px-1 text-accent">a[j], a[j+1] = a[j+1], a[j]</span>
               </code>
             </pre>
-            <div className="relative z-10 mt-5 grid grid-cols-3 gap-2 border-t border-border/70 pt-4">
+            <div className="relative z-10 mt-5 hidden grid-cols-3 gap-2 border-t border-border/70 pt-4 sm:grid">
               {[
                 ['INPUT', '[7, 3, 5, 1]'],
                 ['STATE', 'COMPARING'],
@@ -184,7 +186,7 @@ export function HomePage() {
                 <span className={`font-editorial text-4xl font-semibold ${lang.color}`}>{lang.name}</span>
                 <span className="font-mono text-xs text-muted/50">{lang.code}</span>
               </div>
-              <span className="mt-auto text-sm text-muted">{lang.desc}</span>
+              <span className="mt-auto text-sm text-muted">{lang.desc[locale]}</span>
               <span className="mt-5 flex items-center justify-between border-t border-border/70 pt-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-accent">
                 {t.common.learn}
                 <span className="transition-transform group-hover:translate-x-1">→</span>

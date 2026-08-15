@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getAlgorithmMeta } from '../content/algorithms/registry';
 import { getRunner } from '../engine/runners/registry';
@@ -21,7 +21,6 @@ import { LeftSidebar } from '../components/layout/LeftSidebar';
 import { RightStatusPanel } from '../components/layout/RightStatusPanel';
 import { InputBar } from '../components/layout/InputBar';
 import { BottomControlBar } from '../components/layout/BottomControlBar';
-import { CodeEditor } from '../components/editor/CodeEditor';
 import { LanguageSwitcher } from '../components/editor/LanguageSwitcher';
 import { PseudocodePanel } from '../components/panels/PseudocodePanel';
 import { MistakesPanel } from '../components/panels/MistakesPanel';
@@ -34,6 +33,10 @@ import { Kbd } from '../components/ui/Kbd';
 import { Modal } from '../components/ui/Modal';
 import { TabbedPanels } from '../components/ui/Tabs';
 import { IconCheck, IconChevronRight, IconInfo, IconStar } from '../components/ui/Icons';
+
+const CodeEditor = lazy(() =>
+  import('../components/editor/CodeEditor').then((module) => ({ default: module.CodeEditor })),
+);
 
 function ShortcutHelp({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
@@ -96,6 +99,7 @@ export function AlgorithmPlaygroundPage() {
   const [loop, setLoop] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [mobileTab, setMobileTab] = useState('viz');
+  const [desktopTab, setDesktopTab] = useState('intro');
 
   const applyInput = useCallback(
     (raw: string, auxOverride?: string) => {
@@ -265,12 +269,6 @@ export function AlgorithmPlaygroundPage() {
       </section>
       <section className="rounded-2xl border border-border bg-surface p-3">
         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
-          {t.panels.pseudocode}
-        </h2>
-        <PseudocodePanel pseudocode={meta.pseudocode} currentCodeLineId={currentCodeLineId} />
-      </section>
-      <section className="rounded-2xl border border-border bg-surface p-3">
-        <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
           {t.panels.mistakes}
         </h2>
         <MistakesPanel meta={meta} />
@@ -284,14 +282,16 @@ export function AlgorithmPlaygroundPage() {
         <LanguageSwitcher value={codeLang} onChange={setCodeLang} />
       </div>
       <div className="relative min-h-64 flex-1">
-        <CodeEditor
-          source={codeExample.source}
-          language={codeLang}
-          highlightLine={highlightLine}
-          theme={theme}
-          fontSize={fontSize}
-          className="absolute inset-0"
-        />
+        <Suspense fallback={<div className="grid h-full place-items-center text-xs text-muted">{t.common.loading}</div>}>
+          <CodeEditor
+            source={codeExample.source}
+            language={codeLang}
+            highlightLine={highlightLine}
+            theme={theme}
+            fontSize={fontSize}
+            className="absolute inset-0"
+          />
+        </Suspense>
       </div>
       <p className="border-t border-border px-3 py-2 text-[11px] leading-relaxed text-muted">
         {t.playground.demoModeNote}
@@ -334,10 +334,16 @@ export function AlgorithmPlaygroundPage() {
     </div>
   );
 
+  const pseudocodeContent: ReactNode = (
+    <section className="min-h-64 rounded-2xl border border-border bg-surface p-3">
+      <PseudocodePanel pseudocode={meta.pseudocode} currentCodeLineId={currentCodeLineId} />
+    </section>
+  );
+
   return (
     <div className="flex flex-col gap-3">
       {/* 页头 */}
-      <header className="coordinate-frame surface-panel flex flex-col gap-3 p-4 sm:p-5">
+      <header className="coordinate-frame surface-panel flex flex-col gap-2 p-3 sm:p-4">
         <nav aria-label="breadcrumb" className="flex items-center gap-1 text-xs text-muted">
           <Link to="/algorithms" className="hover:text-text">
             {t.nav.algorithms}
@@ -391,19 +397,18 @@ export function AlgorithmPlaygroundPage() {
             <LeftSidebar activeId={meta.id} />
           </aside>
           <div className="flex min-w-0 flex-col gap-3">
-            {introContent}
-            <section className="grid gap-3 xl:grid-cols-2">
-              {codeContent}
-              <section className="flex min-h-64 flex-col rounded-2xl border border-border bg-surface">
-                <div className="border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted">
-                  {t.panels.pseudocode}
-                </div>
-                <div className="min-h-0 flex-1 overflow-auto">
-                  <PseudocodePanel pseudocode={meta.pseudocode} currentCodeLineId={currentCodeLineId} />
-                </div>
-              </section>
-            </section>
             {vizContent}
+            <TabbedPanels
+              className="surface-panel overflow-hidden"
+              contentClassName="p-3"
+              active={desktopTab}
+              onChange={setDesktopTab}
+              items={[
+                { id: 'intro', label: t.playground.tabs.intro, content: introContent },
+                { id: 'code', label: t.playground.tabs.code, content: codeContent },
+                { id: 'pseudocode', label: t.panels.pseudocode, content: pseudocodeContent },
+              ]}
+            />
           </div>
           <aside className="sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto">
             <RightStatusPanel meta={meta} current={currentStep} previous={previousStep} />
@@ -416,7 +421,11 @@ export function AlgorithmPlaygroundPage() {
           active={mobileTab}
           onChange={setMobileTab}
           items={[
-            { id: 'intro', label: t.playground.tabs.intro, content: <div className="p-3">{introContent}</div> },
+            {
+              id: 'intro',
+              label: t.playground.tabs.intro,
+              content: <div className="flex flex-col gap-3 p-3">{introContent}{pseudocodeContent}</div>,
+            },
             { id: 'code', label: t.playground.tabs.code, content: codeContent },
             { id: 'viz', label: t.playground.tabs.viz, content: <div className="p-3">{vizContent}</div> },
             {

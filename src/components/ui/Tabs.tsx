@@ -20,7 +20,7 @@ export function Tabs({
   return (
     <div
       role="tablist"
-      className={cn('flex items-center gap-1 overflow-x-auto border-b border-border bg-surface/90 px-1 backdrop-blur', className)}
+      className={cn('tab-strip flex items-center gap-1 overflow-x-auto border-b border-border bg-surface/90 px-1 backdrop-blur', className)}
     >
       {items.map((item) => (
         <button
@@ -30,7 +30,7 @@ export function Tabs({
           aria-selected={active === item.id}
           onClick={() => onChange(item.id)}
           className={cn(
-            'relative -mb-px min-h-11 flex-1 whitespace-nowrap border-b-2 px-3 py-2 text-sm transition-colors',
+            'relative -mb-px min-h-11 min-w-fit flex-none snap-start whitespace-nowrap border-b-2 px-3 py-2 text-sm transition-colors sm:flex-1',
             active === item.id
               ? 'border-accent font-medium text-text'
               : 'border-transparent text-muted hover:text-text',

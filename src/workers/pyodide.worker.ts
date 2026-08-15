@@ -3,8 +3,6 @@
  * 运行时按需从 CDN 加载，绝不访问主线程 UI。
  */
 
-declare function importScripts(...urls: string[]): void;
-
 interface PyodideLike {
   runPythonAsync(code: string): Promise<unknown>;
   setStdout(options: { batched: (text: string) => void }): void;
@@ -40,9 +38,12 @@ scope.onmessage = (e: MessageEvent): void => {
 
 async function loadRuntime(): Promise<void> {
   try {
-    importScripts(`${CDN}pyodide.js`);
-    const loader = (self as unknown as { loadPyodide?: (opts: { indexURL: string }) => Promise<PyodideLike> })
-      .loadPyodide;
+    // Vite emits this worker as an ES module. Module workers cannot call
+    // `importScripts()`, so use Pyodide's ESM entry point in production too.
+    const module = (await import(/* @vite-ignore */ `${CDN}pyodide.mjs`)) as {
+      loadPyodide?: (opts: { indexURL: string }) => Promise<PyodideLike>;
+    };
+    const loader = module.loadPyodide;
     if (!loader) {
       post({ type: 'load-error', message: 'loadPyodide 不可用' });
       return;

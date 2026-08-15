@@ -204,8 +204,8 @@ export function SkillTree({
     <div
       className="relative"
       style={{ width: layout.width, height: layout.height }}
-      role="img"
-      aria-label="skill tree"
+      role="group"
+      aria-label={locale === 'zh' ? '可交互学习路线节点' : 'Interactive learning roadmap nodes'}
     >
       {/* 点阵背景 + 依赖边 */}
       <svg className="absolute inset-0" width={layout.width} height={layout.height} aria-hidden>

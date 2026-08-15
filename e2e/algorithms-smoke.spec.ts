@@ -41,9 +41,11 @@ test.describe('全部算法冒烟测试', () => {
   for (const id of ALGORITHM_IDS) {
     test(`${id} 页面加载并执行完成`, async ({ page }) => {
       await page.goto(`/algorithms/${id}`);
-      await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 30_000 });
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 30_000 });
       // 有步骤可走
       await expect(page.getByTestId('step-counter')).toContainText('第 1 /');
+      // 代码编辑器按需加载，初始动画视图不应提前下载 Monaco。
+      await expect(page.locator('.monaco-editor')).toHaveCount(0);
       // 跳到结尾 → 完成
       await page.getByTestId('btn-jump-end').click();
       await expect(page.getByTestId('step-counter')).toContainText('已完成');

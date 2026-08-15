@@ -39,18 +39,18 @@ export function BookPage({
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
       {/* 封面区 */}
-      <header className="coordinate-frame surface-panel retro-grid flex flex-col gap-4 overflow-hidden p-5 sm:p-7">
+      <header className="coordinate-frame surface-panel flex flex-col gap-4 overflow-hidden p-5 sm:p-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="micro-label text-accent">{kicker} / index</p>
-            <h1 className="font-editorial mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
             {subtitle && <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{subtitle}</p>}
           </div>
           {toolbar && <div className="min-w-0">{toolbar}</div>}
         </div>
       </header>
 
-      <div className="grid items-start gap-8 xl:grid-cols-[244px_minmax(0,1fr)] xl:gap-12">
+      <div className="grid items-start gap-6 xl:grid-cols-[224px_minmax(0,1fr)] xl:gap-9">
         {/* 目录（书籍式侧栏） */}
         <nav
           aria-label={kicker}
@@ -118,13 +118,13 @@ export function BookSection({
   children: ReactNode;
 }) {
   return (
-    <section id={`sec-${id}`} className="mb-10 scroll-mt-24 sm:mb-12">
+    <section id={`sec-${id}`} className="mb-8 scroll-mt-24 sm:mb-10">
       {/* 章头：大号编号 + 大标题，层级一目了然 */}
       <div className="mb-3 flex flex-wrap items-baseline gap-3 border-b border-border pb-3 sm:mb-4 sm:gap-4">
         <span className="shrink-0 font-mono text-xl font-bold leading-none text-accent sm:text-2xl">
           {String(index).padStart(2, '0')}
         </span>
-        <h2 className="font-editorial text-xl font-semibold tracking-tight sm:text-2xl">{title}</h2>
+        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{title}</h2>
         {right && <span className="ml-auto text-xs text-muted/70">{right}</span>}
       </div>
       <div className="flex flex-col">{children}</div>

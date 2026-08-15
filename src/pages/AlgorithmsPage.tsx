@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { algorithmMetas, filterAlgorithms, getCategories } from '../content/algorithms/registry';
 import { useProgress } from '../stores/progressStore';
 import { useI18n } from '../hooks/useI18n';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cn } from '../lib/cn';
-import { BookPage, BookSection, BookEntry } from '../components/layout/BookPage';
+import { BookPage, BookSection } from '../components/layout/BookPage';
 import { Badge, DifficultyBadge } from '../components/ui/Badge';
 import { IconCheck, IconChevronRight, IconPlay, IconSearch, IconStar } from '../components/ui/Icons';
 
@@ -15,30 +16,36 @@ const DIFFICULTY_DOT: Record<string, string> = {
 };
 
 type DifficultyFilter = 'all' | 'easy' | 'medium' | 'hard';
+type StatusFilter = 'all' | 'favorites' | 'completed';
 
 /** 算法可视化：书籍目录式排版 */
 export function AlgorithmsPage() {
   const { t, locale, localize } = useI18n();
   const [query, setQuery] = useState('');
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const isMobile = useMediaQuery('(max-width: 639px)');
   const completedAlgorithms = useProgress((s) => s.completedAlgorithms);
   const favorites = useProgress((s) => s.favorites);
 
   const categories = useMemo(() => getCategories(), []);
-  const filtered = useMemo(
-    () =>
-      filterAlgorithms({
+  const filtered = useMemo(() => {
+    const matches = filterAlgorithms({
         query,
         difficulty: difficulty === 'all' ? undefined : difficulty,
-      }),
-    [query, difficulty],
-  );
+      });
+    if (statusFilter === 'favorites') return matches.filter((meta) => favorites.includes(meta.id));
+    if (statusFilter === 'completed') return matches.filter((meta) => completedAlgorithms[meta.id] !== undefined);
+    return matches;
+  }, [query, difficulty, statusFilter, favorites, completedAlgorithms]);
 
   const toc = categories.map((cat) => ({
     id: cat.id,
     label: t.algorithms.categories[cat.id],
     count: filtered.filter((m) => m.category === cat.id).length,
   }));
+  const firstVisibleCategory = categories.find((cat) => filtered.some((meta) => meta.category === cat.id))?.id;
 
   const toolbar = (
     <div className="flex flex-col gap-2">
@@ -67,6 +74,26 @@ export function AlgorithmsPage() {
             {d === 'all' ? t.algorithms.allCategories : t.common.difficulty[d]}
           </button>
         ))}
+        <span className="mx-1 hidden h-6 w-px bg-border sm:block" aria-hidden />
+        {(['all', 'favorites', 'completed'] as const).map((value) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setStatusFilter(value)}
+            className={cn(
+              'rounded-full border px-3 py-1 text-xs transition-colors',
+              statusFilter === value
+                ? 'border-accent/60 bg-accentsoft font-medium text-accent'
+                : 'border-border text-muted hover:text-text',
+            )}
+          >
+            {value === 'all'
+              ? (locale === 'zh' ? '全部状态' : 'All status')
+              : value === 'favorites'
+                ? (locale === 'zh' ? '已收藏' : 'Favorites')
+                : t.common.completed}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -82,57 +109,56 @@ export function AlgorithmsPage() {
       {categories.map((cat, ci) => {
         const items = filtered.filter((m) => m.category === cat.id);
         if (items.length === 0) return null;
+        const expanded = !isMobile || cat.id === firstVisibleCategory || query.trim() !== '' || expandedCategories.includes(cat.id);
         return (
           <BookSection
             key={cat.id}
             id={cat.id}
             index={ci + 1}
             title={t.algorithms.categories[cat.id]}
-            right={`${items.length} ${locale === 'zh' ? '个算法' : 'algorithms'}`}
+            right={isMobile ? (
+              <button
+                type="button"
+                onClick={() => setExpandedCategories((current) => current.includes(cat.id) ? current.filter((id) => id !== cat.id) : [...current, cat.id])}
+                className="rounded-full border border-border px-3 py-1 text-xs text-accent"
+                aria-expanded={expanded}
+              >
+                {expanded ? (locale === 'zh' ? '收起' : 'Collapse') : `${items.length} · ${locale === 'zh' ? '展开' : 'Expand'}`}
+              </button>
+            ) : `${items.length} ${locale === 'zh' ? '个算法' : 'algorithms'}`}
           >
-            {items.map((meta, idx) => {
-              const done = completedAlgorithms[meta.id] !== undefined;
-              const fav = favorites.includes(meta.id);
-              return (
-                <BookEntry
-                  key={meta.id}
-                  number={`${ci + 1}.${idx + 1}`}
-                  accentDot={undefined}
-                  title={
-                    <Link
-                      to={`/algorithms/${meta.id}`}
-                      className="group inline-flex items-center gap-2 hover:underline"
-                    >
-                      <span className={cn('h-2 w-2 rounded-full', DIFFICULTY_DOT[meta.difficulty])} aria-hidden />
-                      <span>{localize(meta.name)}</span>
-                      {fav && <IconStar size={13} className="text-amber-500" />}
-                      {done && <IconCheck size={14} className="text-emerald-500" />}
-                      <IconChevronRight
-                        size={14}
-                        className="text-muted opacity-0 transition-opacity group-hover:opacity-100"
-                      />
-                    </Link>
-                  }
-                  meta={
-                    <>
+            {expanded && <div className="grid gap-3 sm:grid-cols-2">
+              {items.map((meta, idx) => {
+                const done = completedAlgorithms[meta.id] !== undefined;
+                const fav = favorites.includes(meta.id);
+                return (
+                  <Link
+                    key={meta.id}
+                    to={`/algorithms/${meta.id}`}
+                    className="interactive-card surface-panel group flex min-h-28 flex-col p-3 sm:min-h-48 sm:p-4"
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className="font-mono text-[10px] text-muted/60">{ci + 1}.{idx + 1}</span>
+                      <span className={cn('mt-1 h-2 w-2 shrink-0 rounded-full', DIFFICULTY_DOT[meta.difficulty])} aria-hidden />
+                      <h3 className="font-semibold leading-snug text-text">{localize(meta.name)}</h3>
+                      <span className="ml-auto flex gap-1.5">
+                        {fav && <IconStar size={13} className="text-amber-500" />}
+                        {done && <IconCheck size={14} className="text-emerald-500" />}
+                      </span>
+                    </div>
+                    <p className="mt-3 hidden line-clamp-2 text-xs leading-relaxed text-muted sm:block">{localize(meta.description)}</p>
+                    <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-3 sm:pt-4">
                       <DifficultyBadge difficulty={meta.difficulty} />
-                      <Badge tone="neutral">{meta.complexity.time.average}</Badge>
-                      <Badge tone="neutral">{meta.complexity.space}</Badge>
-                    </>
-                  }
-                  description={localize(meta.description)}
-                  action={
-                    <Link
-                      to={`/algorithms/${meta.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
-                    >
-                      <IconPlay size={12} />
-                      {t.algorithms.startDemo}
-                    </Link>
-                  }
-                />
-              );
-            })}
+                      <Badge tone="neutral" className="max-sm:hidden">T {meta.complexity.time.average}</Badge>
+                      <Badge tone="neutral" className="max-sm:hidden">S {meta.complexity.space}</Badge>
+                      <span className="ml-auto inline-flex items-center gap-1 text-xs font-semibold text-accent">
+                        <IconPlay size={12} />{t.algorithms.startDemo}<IconChevronRight size={12} />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>}
           </BookSection>
         );
       })}

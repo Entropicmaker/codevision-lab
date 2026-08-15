@@ -20,8 +20,11 @@ test.describe('移动端冒泡排序', () => {
     await page.getByRole('tab', { name: '动画' }).click();
     await page.getByTestId('btn-next').click();
     await expect(page.getByTestId('step-counter')).toContainText('第 2 /');
-    await page.getByTestId('btn-jump-end').click();
-    await expect(page.getByText('已完成').first()).toBeVisible();
+    if ((page.viewportSize()?.width ?? 390) < 640) {
+      await expect(page.getByText('更多', { exact: true })).toBeVisible();
+    } else {
+      await expect(page.getByTestId('btn-reset')).toBeVisible();
+    }
   });
 
   test('移动端菜单导航可用', async ({ page }) => {
@@ -80,8 +83,19 @@ test.describe('移动端冒泡排序', () => {
     await page.getByRole('tab', { name: '代码' }).click();
     await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 60_000 });
     await page.getByRole('tab', { name: '动画' }).click();
-    for (const id of ['btn-prev', 'btn-play-pause', 'btn-next', 'btn-reset', 'btn-jump-start', 'btn-jump-end']) {
+    for (const id of ['btn-prev', 'btn-play-pause', 'btn-next']) {
       await expect(page.getByTestId(id)).toBeVisible();
+    }
+    if ((page.viewportSize()?.width ?? 390) < 640) {
+      for (const id of ['btn-reset', 'btn-jump-start', 'btn-jump-end']) {
+        await expect(page.getByTestId(id)).toBeHidden();
+      }
+      await page.getByText('更多', { exact: true }).click();
+      await expect(page.getByRole('button', { name: '重新开始' })).toBeVisible();
+    } else {
+      for (const id of ['btn-reset', 'btn-jump-start', 'btn-jump-end']) {
+        await expect(page.getByTestId(id)).toBeVisible();
+      }
     }
     await page.getByTestId('btn-next').click();
     await expect(page.getByTestId('step-counter')).toContainText('第 2 /');

@@ -1,16 +1,19 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { lessonChapters, lessonLanguages } from '../content/lessons/chapters';
 import { getLessonsByLanguage } from '../content/lessons/registry';
 import type { CodeLang } from '../engine/types/step';
 import { useI18n } from '../hooks/useI18n';
+import { useProgress } from '../stores/progressStore';
 import { cn } from '../lib/cn';
 import { NotFoundPage } from './NotFoundPage';
-import { IconChevronRight } from '../components/ui/Icons';
+import { Badge } from '../components/ui/Badge';
+import { IconCheck, IconChevronRight, IconPlay } from '../components/ui/Icons';
 
-const LANGS: Array<{ id: CodeLang; name: string; subtitle: string }> = [
-  { id: 'cpp', name: 'C++', subtitle: '性能与内存的掌控' },
-  { id: 'csharp', name: 'C#', subtitle: '现代 .NET 应用开发' },
-  { id: 'python', name: 'Python', subtitle: '简洁与生态' },
+const LANGS: Array<{ id: CodeLang; name: string; subtitle: { zh: string; en: string } }> = [
+  { id: 'cpp', name: 'C++', subtitle: { zh: '性能与内存的掌控', en: 'Performance and memory control' } },
+  { id: 'csharp', name: 'C#', subtitle: { zh: '现代 .NET 应用开发', en: 'Modern .NET application development' } },
+  { id: 'python', name: 'Python', subtitle: { zh: '简洁与生态', en: 'Clarity and a rich ecosystem' } },
 ];
 
 const DIFFICULTY_DOT: Record<string, string> = {
@@ -23,6 +26,8 @@ const DIFFICULTY_DOT: Record<string, string> = {
 export function LessonTreePage() {
   const { lang } = useParams();
   const { t, locale, localize } = useI18n();
+  const completedLessons = useProgress((s) => s.completedLessons);
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
   const valid = lessonLanguages.includes(lang as CodeLang);
   if (!valid || !lang) {
@@ -39,16 +44,23 @@ export function LessonTreePage() {
   }
 
   const current = LANGS.find((l) => l.id === language);
+  const completedCount = lessons.filter((lesson) => completedLessons[lesson.id] !== undefined).length;
+  const nextLesson = lessons.find((lesson) => completedLessons[lesson.id] === undefined) ?? lessons[0];
+  const progress = lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0;
   let chapterNumber = 0;
 
   const scrollTo = (id: string): void => {
-    document.getElementById(`ch-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const owner = groups.find((group) => group.chapters.some((chapter) => chapter.id === id));
+    if (owner) setExpandedGroups((state) => ({ ...state, [owner.id]: true }));
+    window.requestAnimationFrame(() => {
+      document.getElementById(`ch-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   };
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
       {/* 书籍封面区 */}
-      <header className="coordinate-frame surface-panel retro-grid flex flex-col gap-5 overflow-hidden p-5 sm:p-7">
+      <header className="coordinate-frame surface-panel flex flex-col gap-5 overflow-hidden p-5 sm:p-7">
         <div className="flex flex-wrap items-center gap-2">
           {LANGS.map((l) => (
             <Link
@@ -74,10 +86,24 @@ export function LessonTreePage() {
         </div>
         <div>
           <p className="micro-label text-accent">{t.nav.lessons} / archive</p>
-          <h1 className="font-editorial mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">{current?.name}</h1>
-          <p className="mt-2 text-sm leading-7 text-muted">
-            {current?.subtitle} · {t.lessons.subtitle}
-          </p>
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">{current?.name}</h1>
+          <p className="mt-2 text-sm leading-7 text-muted">{current?.subtitle[locale]} · {t.lessons.subtitle}</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div>
+            <div className="mb-2 flex items-center justify-between text-xs text-muted">
+              <span>{locale === 'zh' ? '课程进度' : 'Course progress'}</span>
+              <span className="font-mono">{completedCount}/{lessons.length} · {progress}%</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-surface2" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+              <div className="h-full rounded-full bg-accent" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+          {nextLesson && (
+            <Link to={`/learn/${language}/${nextLesson.id}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-white">
+              <IconPlay size={14} />{completedCount > 0 ? (locale === 'zh' ? '继续学习' : 'Continue') : t.common.learn}
+            </Link>
+          )}
         </div>
       </header>
 
@@ -142,13 +168,25 @@ export function LessonTreePage() {
                 <span className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                   PART {gi + 1}
                 </span>
-                <h2 className="font-editorial text-2xl font-semibold tracking-tight">{localize(group.title)}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight">{localize(group.title)}</h2>
                 <span className="ml-auto text-xs text-muted/70">
                   {group.chapters.length} {locale === 'zh' ? '章' : 'chapters'}
                 </span>
+                {group.id.includes('advanced') && (
+                  <button
+                    type="button"
+                    onClick={() => setExpandedGroups((state) => ({ ...state, [group.id]: !state[group.id] }))}
+                    className="rounded-full border border-border px-3 py-1 text-xs text-muted hover:text-text"
+                    aria-expanded={expandedGroups[group.id] === true}
+                  >
+                    {expandedGroups[group.id] === true
+                      ? (locale === 'zh' ? '收起' : 'Collapse')
+                      : (locale === 'zh' ? '展开进阶章节' : 'Expand advanced chapters')}
+                  </button>
+                )}
               </div>
 
-              <div className="flex flex-col">
+              {(!group.id.includes('advanced') || expandedGroups[group.id] === true) && <div className="flex flex-col">
                 {group.chapters.map((chapter) => {
                   chapterNumber += 1;
                   const chapterLessons = lessonsByChapter.get(chapter.id) ?? [];
@@ -163,7 +201,7 @@ export function LessonTreePage() {
                         <span className="shrink-0 font-mono text-2xl font-bold leading-none text-accent">
                           {String(chapterNumber).padStart(2, '0')}
                         </span>
-                        <h3 className="font-editorial text-xl font-semibold leading-snug tracking-tight">
+                        <h3 className="text-xl font-semibold leading-snug tracking-tight">
                           {localize(chapter.title)}
                         </h3>
                       </div>
@@ -190,9 +228,13 @@ export function LessonTreePage() {
                               <span className="text-sm font-medium text-accent group-hover:underline">
                                 {localize(lesson.title)}
                               </span>
+                              <span className="ml-auto flex items-center gap-2">
+                                <span className="hidden text-[10px] text-muted sm:inline">≈ 8 min</span>
+                                {completedLessons[lesson.id] !== undefined && <Badge tone="done"><IconCheck size={11} />{t.common.completed}</Badge>}
+                              </span>
                               <IconChevronRight
                                 size={14}
-                                className="ml-auto text-muted opacity-0 transition-opacity group-hover:opacity-100"
+                                className="text-muted opacity-0 transition-opacity group-hover:opacity-100"
                               />
                             </Link>
                           ))}
@@ -201,10 +243,8 @@ export function LessonTreePage() {
 
                       {/* 章节主题一览 */}
                       <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 sm:pl-12">
-                        {chapter.topics.map((topic) => (
-                          <span key={topic} className="text-[11px] text-muted/80">
-                            {topic}
-                          </span>
+                        {locale === 'zh' && chapter.topics.map((topic) => (
+                          <span key={topic} className="text-[11px] text-muted/80">{topic}</span>
                         ))}
                         {chapterLessons.length === 0 && (
                           <span className="text-[11px] italic text-muted/50">
@@ -215,7 +255,7 @@ export function LessonTreePage() {
                     </article>
                   );
                 })}
-              </div>
+              </div>}
             </section>
           ))}
 

@@ -25,7 +25,7 @@ export const zhCN = {
     toDark: '切换深色模式',
   },
   lang: {
-    toggle: 'Switch to English',
+    toggle: 'Switch interface to English',
     label: '中文',
   },
 
@@ -59,6 +59,7 @@ export const zhCN = {
     back: '返回',
     loading: '加载中…',
     retry: '重试',
+    skipToContent: '跳到主要内容',
     empty: '暂无内容',
     step: '步',
     difficulty: { easy: '简单', medium: '中等', hard: '困难' },
@@ -268,5 +269,7 @@ export const zhCN = {
 
   footer: {
     note: 'CodeVision Lab · 学习进度与偏好保存在本地浏览器',
+    links: '相关链接',
+    blog: '返回地理博客',
   },
 } as const;

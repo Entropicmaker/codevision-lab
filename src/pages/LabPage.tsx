@@ -7,7 +7,7 @@ import { CodeEditor } from '../components/editor/CodeEditor';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Tabs } from '../components/ui/Tabs';
-import { IconAlert, IconCheck, IconInfo, IconPlay } from '../components/ui/Icons';
+import { IconAlert, IconCheck, IconInfo, IconPlay, IconReset } from '../components/ui/Icons';
 
 type LabTab = 'python' | 'cpp' | 'csharp';
 type RuntimeStatus = 'idle' | 'loading' | 'ready' | 'failed';
@@ -52,6 +52,8 @@ export function LabPage() {
         case 'load-error':
           setStatus('failed');
           setError(msg.message);
+          worker.terminate();
+          if (workerRef.current === worker) workerRef.current = null;
           break;
         case 'output':
           setOutput((prev) => [...prev, msg.text]);
@@ -103,6 +105,23 @@ export function LabPage() {
     }, RUN_TIMEOUT_MS);
   };
 
+  const retryRuntime = (): void => {
+    clearTimeoutIfAny();
+    workerRef.current?.terminate();
+    workerRef.current = null;
+    setOutput([]);
+    setResult(null);
+    setError(null);
+    loadRuntime();
+  };
+
+  const resetWorkbench = (): void => {
+    setCode(t.lab.python.example);
+    setOutput([]);
+    setResult(null);
+    setError(null);
+  };
+
   const statusBadge = (() => {
     switch (status) {
       case 'ready':
@@ -142,39 +161,44 @@ export function LabPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <header className="coordinate-frame surface-panel retro-grid p-5 sm:p-7">
+      <header className="coordinate-frame surface-panel p-5 sm:p-7">
         <p className="micro-label text-accent">Live coding / workbench</p>
-        <h1 className="font-editorial mt-2 text-3xl font-semibold sm:text-5xl">{t.lab.title}</h1>
+        <h1 className="mt-2 text-3xl font-semibold sm:text-5xl">{t.lab.title}</h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{t.lab.subtitle}</p>
       </header>
 
       <Tabs
         items={[
-          { id: 'python', label: t.lab.python.name },
-          { id: 'cpp', label: t.lab.cpp.name },
-          { id: 'csharp', label: t.lab.csharp.name },
+          { id: 'python', label: <><span className="sm:hidden">Python</span><span className="hidden sm:inline">{t.lab.python.name}</span></> },
+          { id: 'cpp', label: <><span className="sm:hidden">C++</span><span className="hidden sm:inline">{t.lab.cpp.name}</span></> },
+          { id: 'csharp', label: <><span className="sm:hidden">C#</span><span className="hidden sm:inline">{t.lab.csharp.name}</span></> },
         ]}
         active={tab}
         onChange={(id) => setTab(id as LabTab)}
       />
 
       {tab === 'python' ? (
-        <div className="grid items-start gap-3 xl:grid-cols-[1fr_320px]">
+        <div className="grid items-start gap-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
           <section className="surface-panel flex min-h-[460px] flex-col overflow-hidden">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-semibold text-text">{t.lab.python.name}</h2>
-                {statusBadge}
+                <span aria-live="polite">{statusBadge}</span>
               </div>
-              <Button
-                variant="primary"
-                size="sm"
-                icon={<IconPlay size={14} />}
-                onClick={run}
-                disabled={status !== 'ready'}
-              >
-                {t.lab.python.run}
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <Button size="sm" variant="ghost" icon={<IconReset size={14} />} onClick={resetWorkbench}>
+                  {t.common.clear}
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={<IconPlay size={14} />}
+                  onClick={run}
+                  disabled={status !== 'ready'}
+                >
+                  {t.lab.python.run}
+                </Button>
+              </div>
             </div>
             <div className="relative min-h-80 flex-1">
               <CodeEditor
@@ -231,8 +255,21 @@ export function LabPage() {
                 </pre>
               </div>
             )}
+            {status === 'loading' && (
+              <div className="surface-panel p-4 text-xs leading-relaxed text-muted" role="status">
+                <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-surface2">
+                  <span className="block h-full w-2/3 animate-pulse rounded-full bg-accent" />
+                </div>
+                {t.lab.python.loading}
+              </div>
+            )}
             {status === 'failed' && (
-              <p className="text-xs text-muted">{t.lab.python.loadFailed}</p>
+              <div className="flex flex-col items-start gap-2 rounded-2xl border border-danger/30 bg-danger/5 p-4">
+                <p className="text-xs leading-relaxed text-muted">{t.lab.python.loadFailed}</p>
+                <Button size="sm" icon={<IconReset size={14} />} onClick={retryRuntime}>
+                  {t.common.retry}
+                </Button>
+              </div>
             )}
           </section>
         </div>

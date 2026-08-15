@@ -10,14 +10,15 @@ test.describe('冒泡排序纵向切片', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/algorithms/bubble-sort');
-    await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId('step-counter')).toContainText('第 1 /', { timeout: 30_000 });
   });
 
   test('初始状态：步骤 1、已暂停、变量面板可见', async ({ page }) => {
     await expect(page.getByTestId('step-counter')).toContainText('第 1 /');
     await expect(page.getByTestId('step-counter')).toContainText('已暂停');
     await expect(page.getByText('变量', { exact: true })).toBeVisible();
-    // 伪代码面板存在
+    // 伪代码面板按标签展示
+    await page.getByRole('tab', { name: '伪代码' }).click();
     await expect(page.getByText('bubbleSort(a):').first()).toBeVisible();
     // 初始步骤说明
     await expect(page.getByText(/开始冒泡排序/).first()).toBeVisible();
@@ -73,6 +74,8 @@ test.describe('冒泡排序纵向切片', () => {
   });
 
   test('三种语言切换，代码与高亮同步', async ({ page }) => {
+    await page.getByRole('tab', { name: '代码', exact: true }).click();
+    await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 30_000 });
     // 默认 C++ 代码
     await expect(page.locator('.monaco-editor .view-lines')).toContainText('vector<int>& a');
     await page.getByRole('tab', { name: 'C#' }).click();
@@ -109,7 +112,7 @@ test.describe('冒泡排序纵向切片', () => {
     expect(progress).toContain('bubble-sort');
 
     await page.reload();
-    await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId('step-counter')).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText('已完成', { exact: true }).first()).toBeVisible();
   });
 

@@ -26,7 +26,7 @@ export const enUS: Dict = {
     toDark: 'Switch to dark mode',
   },
   lang: {
-    toggle: '切换到中文',
+    toggle: '将界面切换为中文',
     label: 'English',
   },
 
@@ -60,6 +60,7 @@ export const enUS: Dict = {
     back: 'Back',
     loading: 'Loading…',
     retry: 'Retry',
+    skipToContent: 'Skip to main content',
     empty: 'Nothing here yet',
     step: 'step',
     difficulty: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
@@ -277,5 +278,7 @@ export const enUS: Dict = {
 
   footer: {
     note: 'CodeVision Lab · progress & preferences are stored locally in your browser',
+    links: 'Related links',
+    blog: 'Back to geography blog',
   },
 };

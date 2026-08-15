@@ -34,7 +34,7 @@ export function BottomControlBar({
   onLoopChange,
   onShowShortcuts,
 }: BottomControlBarProps) {
-  const { t, fmt } = useI18n();
+  const { t, fmt, locale } = useI18n();
   const { index, total, status } = snapshot;
   const hasSteps = total > 0;
   const canPrev = index > 0;
@@ -85,7 +85,7 @@ export function BottomControlBar({
         <div className="flex w-full items-center justify-center gap-1 lg:w-auto">
           <button
             type="button"
-            className={controlButton}
+            className={cn(controlButton, 'max-sm:hidden')}
             onClick={() => controller.jumpTo(0)}
             disabled={!canPrev}
             title={t.common.jumpStart}
@@ -129,7 +129,7 @@ export function BottomControlBar({
           </button>
           <button
             type="button"
-            className={controlButton}
+            className={cn(controlButton, 'max-sm:hidden')}
             onClick={() => controller.jumpTo(total - 1)}
             disabled={!canNext}
             title={t.common.jumpEnd}
@@ -140,7 +140,7 @@ export function BottomControlBar({
           </button>
           <button
             type="button"
-            className={controlButton}
+            className={cn(controlButton, 'max-sm:hidden')}
             onClick={() => controller.reset()}
             disabled={!hasSteps}
             title={t.common.reset}
@@ -149,9 +149,48 @@ export function BottomControlBar({
           >
             <IconReset size={16} />
           </button>
+          <details className="relative sm:hidden">
+            <summary className="inline-flex h-10 min-w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-border bg-surface px-2 text-xs text-muted">
+              {locale === 'zh' ? '更多' : 'More'}
+            </summary>
+            <div className="absolute bottom-12 right-0 z-50 w-64 rounded-2xl border border-border bg-surface p-3 shadow-2xl">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="shrink-0 text-[11px] text-muted">{t.playback.speedLabel}</span>
+                <input
+                  type="range"
+                  min={SPEED_MIN}
+                  max={SPEED_MAX}
+                  step={0.25}
+                  value={speed}
+                  onChange={(e) => onSpeedChange(Number(e.target.value))}
+                  className="h-1 min-w-0 flex-1 cursor-pointer accent-[var(--cv-accent)]"
+                  aria-label={t.playback.speedLabel}
+                />
+                <span className="font-mono text-[10px] text-muted">{speed.toFixed(2)}×</span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={loop}
+                  onClick={() => onLoopChange(!loop)}
+                  className={cn(
+                    'h-10 rounded-xl border px-3 text-xs',
+                    loop ? 'border-accent/50 bg-accentsoft text-accent' : 'border-border text-muted',
+                  )}
+                >
+                  {t.common.autoplay}
+                </button>
+                <button type="button" className={controlButton} onClick={() => controller.reset()} disabled={!hasSteps}>
+                  <IconReset size={15} />
+                  <span className="ml-1">{t.common.reset}</span>
+                </button>
+              </div>
+            </div>
+          </details>
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-2 lg:border-0 lg:pt-0">
+        <div className="hidden items-center justify-between gap-3 border-t border-border/60 pt-2 sm:flex lg:border-0 lg:pt-0">
           {/* 速度 */}
           <div className="flex min-w-0 flex-1 items-center gap-2 lg:flex-none">
             <span className="text-[10px] text-muted sm:text-[11px]">{t.playback.speedLabel}</span>

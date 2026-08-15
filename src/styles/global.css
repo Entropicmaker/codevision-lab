@@ -119,11 +119,7 @@
     position: fixed;
     inset: 0;
     z-index: -2;
-    background-image:
-      linear-gradient(var(--cv-grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--cv-grid) 1px, transparent 1px),
-      radial-gradient(circle at 78% 5%, var(--cv-glow), transparent 32%);
-    background-size: 48px 48px, 48px 48px, 100% 100%;
+    background-image: radial-gradient(circle at 78% 5%, var(--cv-glow), transparent 32%);
     content: '';
     pointer-events: none;
   }
@@ -215,7 +211,7 @@
     background-image:
       linear-gradient(var(--cv-grid) 1px, transparent 1px),
       linear-gradient(90deg, var(--cv-grid) 1px, transparent 1px);
-    background-size: 28px 28px;
+    background-size: 34px 34px;
   }
   .terminal-window {
     position: relative;
@@ -280,6 +276,14 @@
   /* 复古未来：电子青辉光 */
   .glow-accent {
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--cv-accent) 35%, transparent), 0 12px 36px var(--cv-glow);
+  }
+  .tab-strip {
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+  }
+  .tab-strip::-webkit-scrollbar {
+    display: none;
   }
   /* Monaco 当前执行行高亮 */
   .cv-current-line {

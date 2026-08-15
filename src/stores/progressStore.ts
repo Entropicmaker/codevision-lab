@@ -17,6 +17,8 @@ export interface ProgressState {
   markAlgorithmComplete: (id: string, lastInput: string) => void;
   markLessonComplete: (id: string) => void;
   toggleFavorite: (id: string) => void;
+  replaceProgress: (data: Pick<ProgressState, 'completedAlgorithms' | 'completedLessons' | 'favorites'>) => void;
+  resetProgress: () => void;
 }
 
 export const useProgress = create<ProgressState>()(
@@ -45,6 +47,12 @@ export const useProgress = create<ProgressState>()(
             ? state.favorites.filter((f) => f !== id)
             : [...state.favorites, id],
         })),
+      replaceProgress: (data) => set({
+        completedAlgorithms: data.completedAlgorithms,
+        completedLessons: data.completedLessons,
+        favorites: data.favorites,
+      }),
+      resetProgress: () => set({ completedAlgorithms: {}, completedLessons: {}, favorites: [] }),
     }),
     { name: 'cv-progress', version: 1 },
   ),
