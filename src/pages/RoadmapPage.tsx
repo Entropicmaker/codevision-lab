@@ -54,9 +54,14 @@ export function RoadmapPage() {
   const fitView = useCallback(() => {
     const { w, h } = containerSize;
     if (w <= 0 || h <= 0) return;
+    // 小屏需要更大的最小缩放，保证技能树节点可读可点（节点 224px 宽）
+    const minUsableScale = w < 768 ? 0.68 : MIN_SCALE;
     const scale = Math.min(
       1.2,
-      Math.max(MIN_SCALE, Math.min((w - 48) / layout.width, (h - 48) / layout.height)),
+      Math.max(
+        minUsableScale,
+        Math.min((w - 48) / layout.width, (h - 48) / layout.height),
+      ),
     );
     setView({
       scale,

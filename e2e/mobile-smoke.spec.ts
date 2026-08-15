@@ -31,4 +31,51 @@ test.describe('移动端冒泡排序', () => {
     await page.getByRole('link', { name: '算法可视化' }).click();
     await expect(page).toHaveURL(/\/algorithms/);
   });
+
+  test('书籍页移动目录展开与锚点滚动', async ({ page }) => {
+    await page.goto('/algorithms');
+    await expect(page.getByRole('heading', { name: '算法可视化' })).toBeVisible();
+    // 移动目录 details 展开
+    const details = page.locator('details summary').first();
+    await expect(details).toBeVisible();
+    await details.click();
+    // 点击目录项滚动到章节
+    await page.locator('details button').first().click();
+    await page.waitForTimeout(800);
+    const scrollY = await page.evaluate(() => window.scrollY);
+    expect(scrollY).toBeGreaterThan(100);
+  });
+
+  test('移动端路线图节点可点（最小缩放保证点击目标）', async ({ page }) => {
+    await page.goto('/roadmap');
+    await expect(page.getByText('学习路线图')).toBeVisible();
+    // 找一个视口内的节点并点击
+    const nodes = page.locator('a[href^="/algorithms/"]');
+    const count = await nodes.count();
+    let clicked = false;
+    for (let i = 0; i < count && !clicked; i += 1) {
+      const box = await nodes.nth(i).boundingBox();
+      // 节点大部分在视口内即可（修复后最小缩放保证 152px 宽）
+      if (box && box.width >= 100 && box.x > -100 && box.x < 390 && box.y > 60 && box.y < 844) {
+        await nodes.nth(i).click({ force: true });
+        await page.waitForTimeout(700);
+        clicked = page.url().includes('/algorithms/');
+        break;
+      }
+    }
+    expect(clicked, `节点均不可点（count=${count}）`).toBe(true);
+  });
+
+  test('移动端控制栏核心按钮全部可见', async ({ page }) => {
+    await page.goto('/algorithms/bubble-sort');
+    // 移动端默认在"动画"tab，Monaco 需先切换到"代码"tab 才渲染
+    await page.getByRole('tab', { name: '代码' }).click();
+    await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 60_000 });
+    await page.getByRole('tab', { name: '动画' }).click();
+    for (const id of ['btn-prev', 'btn-play-pause', 'btn-next', 'btn-reset', 'btn-jump-start', 'btn-jump-end']) {
+      await expect(page.getByTestId(id)).toBeVisible();
+    }
+    await page.getByTestId('btn-next').click();
+    await expect(page.getByTestId('step-counter')).toContainText('第 2 /');
+  });
 });

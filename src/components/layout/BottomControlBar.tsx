@@ -60,7 +60,7 @@ export function BottomControlBar({
             )}
             aria-hidden
           />
-          <span className="text-xs font-medium text-text">{statusLabel}</span>
+          <span className="hidden text-xs font-medium text-text sm:inline">{statusLabel}</span>
           <span className="font-mono text-[11px] tabular-nums text-muted">
             {fmt(t.playback.stepOf, { current: index + (total > 0 ? 1 : 0), total })}
           </span>
@@ -151,7 +151,7 @@ export function BottomControlBar({
 
         {/* 速度 */}
         <div className="flex items-center gap-2">
-          <span className="text-[11px] text-muted">{t.playback.speedLabel}</span>
+          <span className="hidden text-[11px] text-muted sm:inline">{t.playback.speedLabel}</span>
           <input
             type="range"
             min={SPEED_MIN}
@@ -159,10 +159,10 @@ export function BottomControlBar({
             step={0.25}
             value={speed}
             onChange={(e) => onSpeedChange(Number(e.target.value))}
-            className="h-1 w-20 cursor-pointer accent-[var(--cv-accent)]"
+            className="h-1 w-16 cursor-pointer accent-[var(--cv-accent)] sm:w-20"
             aria-label={t.playback.speedLabel}
           />
-          <span className="w-12 font-mono text-[11px] tabular-nums text-muted">
+          <span className="hidden w-12 font-mono text-[11px] tabular-nums text-muted sm:inline">
             {speed.toFixed(2)} {t.playback.speedUnit}
           </span>
         </div>
@@ -194,11 +194,11 @@ export function BottomControlBar({
               )}
             />
           </span>
-          {t.common.autoplay}
+          <span className="hidden sm:inline">{t.common.autoplay}</span>
         </button>
 
         {/* 快捷键帮助 */}
-        <Button size="sm" variant="ghost" icon={<IconKeyboard size={14} />} onClick={onShowShortcuts}>
+        <Button size="sm" variant="ghost" icon={<IconKeyboard size={14} />} onClick={onShowShortcuts} className="hidden md:inline-flex">
           {t.playground.shortcutHelp}
         </Button>
       </div>
